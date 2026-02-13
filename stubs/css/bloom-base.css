@@ -1,0 +1,567 @@
+/* ==========================================================================
+   Fonts
+   ========================================================================== */
+
+@font-face {
+  font-display: swap;
+  font-style: normal;
+  font-weight: 400;
+  font-family: "Open Sans";
+  src: url("../fonts/open-sans-regular.woff2") format("woff2");
+}
+
+@font-face {
+  font-display: swap;
+  font-style: normal;
+  font-weight: 500;
+  font-family: "Open Sans";
+  src: url("../fonts/open-sans-500.woff2") format("woff2");
+}
+
+@font-face {
+  font-display: swap;
+  font-style: normal;
+  font-weight: 700;
+  font-family: "Open Sans";
+  src: url("../fonts/open-sans-700.woff2") format("woff2");
+}
+
+/* ==========================================================================
+   Config (CSS custom properties for forms, checkboxes, etc.)
+   ========================================================================== */
+
+:root {
+  /* WordPress */
+  --wordpress-admin-bar: var(--spacing-32);
+  --wordpress-admin-bar-mobile: var(--spacing-46);
+
+  /* Form fields */
+  --field-padding: 12px 16px;
+  --field-border-width: 1px;
+  --field-border-radius: 25px;
+  --field-error-color: var(--color-error);
+  --field-color: var(--color-black);
+  --field-placeholder: var(--color-black);
+  --field-border-color: var(--color-black);
+  --field-background: var(--color-white);
+  --field-background-hover: var(--color-white);
+  --field-border-color-hover: var(--color-error);
+  --field-background-focus: var(--color-white);
+  --field-border-color-focus: var(--color-error);
+
+  /* Checkboxes and radios */
+  --checkbox-size: 1.2em;
+  --checkbox-check-color: var(--color-white);
+  --checkbox-border: var(--color-black);
+  --checkbox-background: var(--color-white);
+  --checkbox-background-hover: var(--color-black);
+  --checkbox-border-hover: var(--color-black);
+  --checkbox-background-checked: var(--color-error);
+  --checkbox-border-checked: var(--color-error);
+
+  /* Typography — responsive size custom properties */
+  --cover-size: var(--text-44);
+  --h1-size: var(--text-36);
+  --h2-size: var(--text-28);
+  --h3-size: var(--text-20);
+  --h4-size: var(--text-18);
+  --h5-size: var(--text-16);
+  --h6-size: var(--text-14);
+  --body-large-size: var(--text-14);
+  --body-size: var(--text-13);
+  --body-small-size: var(--text-12);
+  --label-size: var(--text-12);
+  --button-large-size: var(--text-16);
+  --button-size: var(--text-14);
+  --button-small-size: var(--text-13);
+  --button-text-size: var(--text-12);
+
+  @media (width >= 56.25rem) {
+    --cover-size: var(--text-110);
+    --h1-size: var(--text-72);
+    --h2-size: var(--text-40);
+    --h3-size: var(--text-30);
+    --h4-size: var(--text-24);
+    --h5-size: var(--text-18);
+    --h6-size: var(--text-16);
+    --body-large-size: var(--text-20);
+    --body-size: var(--text-18);
+    --body-small-size: var(--text-16);
+    --label-size: var(--text-16);
+    --button-large-size: var(--text-24);
+    --button-size: var(--text-20);
+    --button-small-size: var(--text-18);
+    --button-text-size: var(--text-16);
+  }
+}
+
+/* ==========================================================================
+   Page
+   ========================================================================== */
+
+html {
+  color: var(--color-black);
+  font-size: 1em;
+  line-height: var(--leading-snug);
+  position: relative;
+  scroll-behavior: smooth;
+  text-rendering: optimizespeed;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  height: stretch;
+}
+
+body {
+  min-height: 100vh;
+  overflow-x: hidden;
+  min-height: stretch;
+}
+
+#main {
+  padding: 1.5rem;
+
+  @media (width >= 56.25rem) {
+    padding: 0;
+  }
+}
+
+img {
+  max-width: 100%;
+}
+
+label {
+  cursor: pointer;
+}
+
+#site-content {
+  & ul,
+  & ol {
+    margin-bottom: var(--spacing-30);
+  }
+}
+
+a {
+  color: var(--color-black);
+
+  &:hover {
+    color: var(--color-success);
+  }
+
+  &:focus {
+    color: var(--color-success);
+  }
+}
+
+.anchor {
+  position: relative;
+  top: calc(-1 * var(--header--height));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+.block-content {
+  & ul {
+    list-style-type: disc;
+    padding-left: 40px;
+  }
+
+  & ol {
+    list-style-type: decimal;
+    padding-left: 40px;
+  }
+}
+
+/* ==========================================================================
+   Typography
+   ========================================================================== */
+
+body,
+.editor-styles-wrapper {
+  font-size: var(--body-size);
+  font-family: var(--font-body);
+}
+
+h1 {
+  font-size: var(--h1-size);
+  font-family: var(--font-heading);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: var(--tracking-wider);
+  word-break: break-word;
+}
+
+h2 {
+  font-size: var(--h2-size);
+  font-family: var(--font-heading);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: var(--tracking-wide);
+  word-break: break-word;
+}
+
+h3 {
+  font-size: var(--h3-size);
+  font-family: var(--font-heading);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: var(--tracking-wide);
+  word-break: break-word;
+}
+
+h4 {
+  font-size: var(--h4-size);
+  font-family: var(--font-heading);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: var(--tracking-normal);
+  word-break: break-word;
+}
+
+h5 {
+  font-size: var(--h5-size);
+  font-family: var(--font-heading);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: var(--tracking-normal);
+  line-height: var(--leading-snug);
+  word-break: break-word;
+}
+
+h6 {
+  font-size: var(--h6-size);
+  font-family: var(--font-heading);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: var(--tracking-normal);
+  line-height: var(--leading-snug);
+  word-break: break-word;
+}
+
+strong,
+.strong {
+  font-weight: var(--font-weight-bold);
+}
+
+/* ==========================================================================
+   Focus
+   ========================================================================== */
+
+button:focus {
+  outline: none;
+}
+
+button:focus-visible {
+  outline: 5px auto -webkit-focus-ring-color;
+}
+
+select:focus {
+  outline: none;
+}
+
+select:focus-visible {
+  outline: 5px auto -webkit-focus-ring-color;
+}
+
+/* ==========================================================================
+   Forms
+   ========================================================================== */
+
+input:not([type="checkbox"], [type="radio"], [type="button"], [type="submit"], [type="range"], [type="color"]),
+textarea,
+select {
+  display: block;
+  border-radius: var(--field-border-radius);
+  padding: var(--field-padding);
+  appearance: none;
+  border: solid var(--field-border-width) var(--field-border-color);
+  background: var(--field-background);
+  color: var(--field-color);
+
+  &:hover {
+    border-color: var(--field-border-color-hover);
+    background: var(--field-background-hover);
+  }
+
+  &:focus {
+    border-color: var(--field-border-color-focus);
+    background: var(--field-background-focus);
+    outline: none;
+  }
+
+  &::placeholder {
+    color: var(--field-placeholder);
+  }
+
+  &:disabled,
+  &[readonly] {
+    opacity: 0.75;
+  }
+}
+
+select {
+  background-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><path fill='none' stroke='black' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right var(--spacing-10) center;
+  background-size: 16px 12px;
+
+  &[multiple],
+  &[size]:not([size="1"]) {
+    padding-right: var(--spacing-10);
+    background-image: none;
+  }
+}
+
+input[type="checkbox"],
+input[type="radio"] {
+  width: var(--checkbox-size);
+  height: var(--checkbox-size);
+  vertical-align: middle;
+  background-color: var(--checkbox-background);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  border: solid var(--field-border-width) var(--field-border-color);
+  appearance: none;
+  print-color-adjust: exact;
+  cursor: pointer;
+
+  &:active {
+    filter: brightness(90%);
+  }
+
+  &:hover {
+    border-color: var(--checkbox-border-hover);
+    background-color: var(--checkbox-background-hover);
+  }
+
+  &:checked {
+    background-color: var(--checkbox-background-checked);
+    border-color: var(--checkbox-border-checked);
+  }
+
+  &:disabled {
+    pointer-events: none;
+    filter: none;
+    opacity: 0.75;
+  }
+}
+
+input[type="checkbox"] {
+  border-radius: 2px;
+
+  &:indeterminate {
+    background-color: var(--checkbox-background-checked);
+    border-color: var(--checkbox-border-checked);
+  }
+
+  &:checked {
+    background-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'><path fill='none' stroke='white' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='M6 10l3 3l6-6'/></svg>");
+  }
+}
+
+input[type="radio"] {
+  border-radius: 50%;
+
+  &:checked {
+    background-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'><circle r='2' fill='white'/></svg>");
+  }
+}
+
+/* ==========================================================================
+   Gravity Forms
+   ========================================================================== */
+
+.gform_fields {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: var(--spacing-20);
+  align-items: flex-start;
+  margin-bottom: var(--spacing-40);
+}
+
+@media (width >= 37.5rem) {
+  .gfield--width-quarter {
+    flex: 4 4;
+  }
+
+  .gfield.gfield--width-third {
+    flex: 3 3;
+  }
+
+  .gfield--width-half {
+    flex: 2 2;
+  }
+}
+
+.gfield {
+  flex-basis: 100%;
+  display: flex;
+
+  .left_label & {
+    flex-direction: row;
+    align-items: center;
+    flex-wrap: wrap;
+
+    & .ginput_container {
+      flex: 3;
+    }
+
+    & .gfield_label {
+      flex: 1;
+    }
+
+    & .gfield_description {
+      flex: 1 1 100%;
+    }
+  }
+
+  .top_label & {
+    flex-direction: column;
+  }
+}
+
+.gfield_label {
+  font-weight: 700;
+  padding-bottom: var(--spacing-5);
+
+  .hidden_label & {
+    position: absolute;
+    left: -1000em;
+  }
+}
+
+.ginput_container {
+  display: flex;
+  flex-direction: column;
+
+  & input:not([type="checkbox"], [type="radio"]),
+  & textarea,
+  & select {
+    margin-bottom: var(--spacing-10);
+    flex: 1;
+  }
+}
+
+.gform_description {
+  margin-bottom: var(--spacing-20);
+  display: block;
+}
+
+.instruction,
+.gform_fileupload_rules {
+  margin-bottom: var(--spacing-10);
+  font-size: var(--text-16);
+
+  @media (width >= 37.5rem) {
+    font-size: var(--text-18);
+  }
+}
+
+.gfield_radio,
+.gfield_checkbox {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-10);
+
+  & > div {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-10);
+  }
+}
+
+.ginput_container_consent {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--spacing-10);
+  margin-top: var(--spacing-20);
+}
+
+.gform_page_footer {
+  display: flex;
+  gap: var(--spacing-10);
+  margin-top: var(--spacing-20);
+}
+
+.gfield_description {
+  font-size: var(--text-14);
+
+  .ginput_container_checkbox + &,
+  .ginput_container_radio + & {
+    margin-top: var(--spacing-10);
+  }
+
+  @media (width >= 37.5rem) {
+    font-size: var(--text-16);
+  }
+}
+
+.validation_message,
+.gfield_required,
+.gfield_required_asterisk,
+.gform_submission_error {
+  color: var(--field-error-color);
+}
+
+.gfield_required_asterisk {
+  display: inline-block;
+  margin-left: 4px;
+}
+
+.validation_message.gfield_validation_message {
+  font-weight: 700;
+  margin-top: var(--spacing-10);
+}
+
+.gfield.gfield_error {
+  & input:not([type="checkbox"], [type="radio"]),
+  & textarea,
+  & select {
+    border-color: var(--field-error-color) !important;
+  }
+}
+
+.gfield_list_group {
+  display: flex;
+  flex-direction: row;
+  gap: var(--spacing-10);
+}
+
+@media (width >= 37.5rem) {
+  .ginput_complex {
+    display: flex;
+    flex-direction: row;
+    gap: var(--spacing-20);
+
+    & .ginput_container {
+      flex: 1;
+    }
+
+    &.ginput_container_address {
+      flex-direction: column;
+    }
+
+    & .hour_minute_colon {
+      display: none;
+    }
+
+    & .ginput_full,
+    & .ginput_right,
+    & .ginput_left {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-20);
+    }
+
+    & .gfield_date_dropdown_day,
+    & .gfield_date_dropdown_month,
+    & .gfield_date_dropdown_year {
+      min-width: 100px;
+    }
+  }
+}

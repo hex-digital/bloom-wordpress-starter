@@ -1,0 +1,39 @@
+{
+  "name": "hex-digital/bloom",
+  "description": "Opinionated WordPress starter layer for Roots Sage",
+  "type": "library",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Hex Digital",
+      "homepage": "https://hexdigital.com"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "Bloom\\": "src/"
+    }
+  },
+  "require": {
+    "php": ">=8.2",
+    "roots/acorn": "^5.0",
+    "livewire/livewire": "^3.4",
+    "log1x/acf-composer": "^3.0",
+    "log1x/navi": "^3.0",
+    "log1x/poet": "^2.0",
+    "spatie/laravel-data": "^3.7",
+    "blade-ui-kit/blade-icons": "^1.8"
+  },
+  "require-dev": {
+    "hex-digital/bloom-modules": "dev-main"
+  },
+  "extra": {
+    "acorn": {
+      "providers": [
+        "Bloom\\BloomServiceProvider"
+      ]
+    }
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true
+}

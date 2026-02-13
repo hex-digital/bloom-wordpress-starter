@@ -1,0 +1,74 @@
+/* ==========================================================================
+   Login Page Styles
+   ========================================================================== */
+
+.login {
+  --brand-primary-color: #50bb7b;
+
+  background: #212121;
+
+  & #backtoblog a,
+  & #nav a {
+    color: #ffffff;
+
+    &:hover {
+      color: var(--brand-primary-color);
+    }
+  }
+
+  & input[type="checkbox"]:focus,
+  & input[type="color"]:focus,
+  & input[type="date"]:focus,
+  & input[type="datetime-local"]:focus,
+  & input[type="datetime"]:focus,
+  & input[type="email"]:focus,
+  & input[type="month"]:focus,
+  & input[type="number"]:focus,
+  & input[type="password"]:focus,
+  & input[type="radio"]:focus,
+  & input[type="search"]:focus,
+  & input[type="tel"]:focus,
+  & input[type="text"]:focus,
+  & input[type="time"]:focus,
+  & input[type="url"]:focus,
+  & input[type="week"]:focus,
+  & select:focus,
+  & textarea:focus {
+    border-color: var(--brand-primary-color);
+    box-shadow: 0 0 0 1px var(--brand-primary-color);
+  }
+}
+
+.wp-core-ui .button-primary {
+  background: var(--brand-primary-color);
+  border-color: var(--brand-primary-color);
+  border-radius: 0;
+
+  &:focus {
+    box-shadow: 0 0 0 1px #fff, 0 0 0 3px var(--brand-primary-color);
+    background: var(--brand-primary-color);
+  }
+
+  &:hover {
+    background: #000;
+    border-color: #000;
+    border-radius: 0;
+  }
+}
+
+.dashicons-visibility::before {
+  color: var(--brand-primary-color);
+}
+
+.login .wp-login-logo a {
+  background-image: url("../images/logo.svg");
+  width: 260px;
+  background-size: 260px;
+  height: 100px;
+}
+
+.login .message,
+.login .notice,
+.login .success {
+  border-color: var(--brand-primary-color);
+}
