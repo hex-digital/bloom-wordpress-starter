@@ -18,9 +18,9 @@
     "php": ">=8.2",
     "roots/acorn": "^5.0",
     "livewire/livewire": "^3.4",
-    "log1x/acf-composer": "^3.0",
-    "log1x/navi": "^3.0",
-    "log1x/poet": "^2.0",
+    "log1x/acf-composer": "^3.4",
+    "log1x/navi": "^3.1",
+    "log1x/poet": "^2.1",
     "spatie/laravel-data": "^3.7",
     "blade-ui-kit/blade-icons": "^1.8"
   },
