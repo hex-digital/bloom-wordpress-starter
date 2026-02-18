@@ -24,6 +24,12 @@
     "spatie/laravel-data": "^3.7",
     "blade-ui-kit/blade-icons": "^1.8"
   },
+  "repositories": [
+    {
+      "type": "git",
+      "url": "https://github.com/hex-digital/bloom-modules.git"
+    }
+  ],
   "require-dev": {
     "hex-digital/bloom-modules": "dev-main"
   },

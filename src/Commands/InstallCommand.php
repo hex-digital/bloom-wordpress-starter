@@ -36,6 +36,8 @@ class InstallCommand extends Command
         $this->copyViews();
         $this->copyFonts();
         $this->copyImages();
+        $this->copyData();
+        $this->copyHelpers();
         $this->copyBloomConfig();
         $this->patchAppCss();
         $this->patchViteConfig();
@@ -161,6 +163,42 @@ class InstallCommand extends Command
         $this->copyDirectory($imagesStubDir, $imagesDest);
 
         $this->components->twoColumnDetail('Copied images → resources/images/', '<fg=green;options=bold>DONE</>');
+    }
+
+    protected function copyData(): void
+    {
+        $dataStubDir = $this->stubsPath.'/Data';
+        $dataDest = base_path('Bloom/Data');
+
+        if (! $this->files->isDirectory($dataStubDir)) {
+            return;
+        }
+
+        if (! $this->files->isDirectory($dataDest)) {
+            $this->files->makeDirectory($dataDest, 0755, true);
+        }
+
+        $this->copyDirectory($dataStubDir, $dataDest);
+
+        $this->components->twoColumnDetail('Copied Data → Bloom/Data/', '<fg=green;options=bold>DONE</>');
+    }
+
+    protected function copyHelpers(): void
+    {
+        $helpersStubDir = $this->stubsPath.'/Helpers';
+        $helpersDest = base_path('Bloom/Helpers');
+
+        if (! $this->files->isDirectory($helpersStubDir)) {
+            return;
+        }
+
+        if (! $this->files->isDirectory($helpersDest)) {
+            $this->files->makeDirectory($helpersDest, 0755, true);
+        }
+
+        $this->copyDirectory($helpersStubDir, $helpersDest);
+
+        $this->components->twoColumnDetail('Copied Helpers → Bloom/Helpers/', '<fg=green;options=bold>DONE</>');
     }
 
     protected function copyBloomConfig(): void
