@@ -20,22 +20,22 @@ class BloomInit extends Command
      *
      * @var string
      */
-    protected $signature = 'bloom:init';
+    protected $signature = 'bloom:setup';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Initialise Bloom - config, plugins, demo content';
+    protected $description = 'Setup Bloom - config, plugins, demo content';
 
     protected array $initActions = [
-        'setup' => 'General Setup',
-        'plugins' => 'Install Starter Plugins',
-        'commonPages' => 'Create Common Pages',
-        'content' => 'Generate Demo Content',
-        'nav' => 'Create Demo Nav',
-        'footer' => 'Create Demo Footer',
+        'setup' => 'General Setup - Discourage search engines',
+        'plugins' => 'Install Starter Plugins - Required + premium',
+        'commonPages' => 'Create Common Pages - Frontpage, About, Contact, Legal',
+        'content' => 'Generate Demo Content - Posts for a selected post type',
+        'nav' => 'Create Demo Nav - Primary navigation and menu items)',
+        'footer' => 'Create Demo Footer - Footer navigation + legal links',
     ];
 
     protected array $pageTitles = [
