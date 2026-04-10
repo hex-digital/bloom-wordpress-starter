@@ -8,6 +8,31 @@ Bloom is an opinionated starter layer for Roots Sage themes. It scaffolds a `Blo
 - Roots Sage with Acorn
 - Node.js/npm for asset builds
 
+## Private Package Access (Required)
+
+`hex-digital/bloom` is currently a private GitHub package. Before running `composer require`, configure your theme project to access private GitHub repositories.
+
+1. Add the package repository to your theme `composer.json`:
+
+```json
+  "repositories": [
+    {
+      "type": "vcs",
+      "url": "git@github.com:hex-digital/bloom-wordpress-starter.git"
+    }
+  ]
+```
+
+Check you're authenticated with Github, by running the following code in your terminal:
+
+```
+  ssh -T git@github.com
+```
+
+If successful you should see a message like:
+> Hi! You've successfully authenticated, but GitHub does not provide shell access.
+
+
 ## Install in an Existing Sage Theme
 
 1. Require the package in your Sage theme:
