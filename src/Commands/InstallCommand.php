@@ -260,88 +260,42 @@ class InstallCommand extends Command
         }
 
         $content = $this->files->get($appCssPath);
+        $requiredLines = [
+            '@import "./bloom-base.css";',
+            '@source "../../Bloom/";',
+        ];
 
-        $hasTokensImport = str_contains($content, 'bloom-tokens.css');
-        $hasBaseImport = str_contains($content, 'bloom-base.css');
+        $missingLines = array_values(array_filter(
+            $requiredLines,
+            fn (string $line): bool => ! str_contains($content, $line)
+        ));
 
-        // Check if already patched
-        if ($hasTokensImport && $hasBaseImport) {
+        if ($missingLines === []) {
             $this->components->twoColumnDetail('resources/css/app.css', '<fg=yellow;options=bold>ALREADY PATCHED</>');
 
             return;
         }
 
-        // If partially patched, append only the missing imports.
-        if ($hasTokensImport || $hasBaseImport) {
-            $missingImports = [];
+        $insertionBlock = implode("\n", $missingLines);
 
-            if (! $hasTokensImport) {
-                $missingImports[] = '@import "./bloom-tokens.css";';
-            }
-
-            if (! $hasBaseImport) {
-                $missingImports[] = '@import "./bloom-base.css";';
-            }
-
-            $content = rtrim($content)."\n".implode("\n", $missingImports)."\n";
-            $this->files->put($appCssPath, $content);
-            $this->components->twoColumnDetail('Patched resources/css/app.css', '<fg=green;options=bold>DONE</>');
-
-            return;
-        }
-
-        // Detect fresh Sage default (TW4 style: starts with @import "tailwindcss")
-        $bloomImports = <<<'CSS'
-@import "./bloom-tokens.css";
-@import "./bloom-base.css";
-CSS;
-
-        $bloomSource = '@source "../../Bloom/";';
-
-        if (str_contains($content, '@import "tailwindcss"')) {
-            // TW4 Sage default — insert bloom imports after tailwindcss import
+        if (str_contains($content, '@import "tailwindcss";')) {
             $content = str_replace(
                 '@import "tailwindcss";',
-                "@import \"tailwindcss\";\n\n{$bloomImports}\n{$bloomSource}",
+                "@import \"tailwindcss\";\n{$insertionBlock}",
                 $content
             );
-
-            $this->files->put($appCssPath, $content);
-            $this->components->twoColumnDetail('Patched resources/css/app.css', '<fg=green;options=bold>DONE</>');
-        } elseif (str_contains($content, '@tailwind base')) {
-            // TW3 Sage default — insert bloom imports after @tailwind base
+        } elseif (str_contains($content, '@tailwind base;')) {
             $content = str_replace(
                 '@tailwind base;',
-                "@tailwind base;\n\n{$bloomImports}",
+                "@tailwind base;\n{$insertionBlock}",
                 $content
             );
-
-            $this->files->put($appCssPath, $content);
-            $this->components->twoColumnDetail('Patched resources/css/app.css', '<fg=green;options=bold>DONE</>');
         } else {
-            // Customized file — append imports so install still completes automatically.
-            $toAppend = [];
-
-            if (! str_contains($content, 'bloom-tokens.css')) {
-                $toAppend[] = '@import "./bloom-tokens.css";';
-            }
-
-            if (! str_contains($content, 'bloom-base.css')) {
-                $toAppend[] = '@import "./bloom-base.css";';
-            }
-
-            if (! str_contains($content, '@source "../../Bloom/";')) {
-                $toAppend[] = '@source "../../Bloom/";';
-            }
-
-            if ($toAppend !== []) {
-                $content = rtrim($content)."\n\n".implode("\n", $toAppend)."\n";
-                $this->files->put($appCssPath, $content);
-                $this->components->twoColumnDetail('Patched resources/css/app.css (customized file)', '<fg=green;options=bold>DONE</>');
-            } else {
-                $this->components->twoColumnDetail('resources/css/app.css', '<fg=yellow;options=bold>ALREADY PATCHED</>');
-            }
+            $content = $insertionBlock."\n\n".ltrim($content);
         }
+
+        $this->files->put($appCssPath, $content);
+        $this->components->twoColumnDetail('Patched resources/css/app.css', '<fg=green;options=bold>DONE</>');
     }
 
     protected function patchViteConfig(): void
