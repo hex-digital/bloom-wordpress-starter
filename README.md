@@ -60,7 +60,7 @@ The `bloom:install` command:
 
 - creates `Bloom/` directories (`Blocks`, `Components`, `Composers`, `Livewire`, etc.)
 - copies starter files into `resources/views`, `resources/css`, `resources/images`, and `resources/fonts`
-- copies package root files into the theme root (`.env`, `screenshot.png`)
+- copies package root files into the theme root (`screenshot.png`)
 - copies GitHub automation files into `.github/` (workflows + labeler config)
 - copies Bloom config into `Bloom/config`
 - patches `resources/css/app.css` to include Bloom CSS
@@ -78,13 +78,9 @@ Bloom updates your Vite config to include:
 
 For non-Bedrock Sage themes, Bloom also ensures:
 
-- `base: process.env.BASE_PATH || '/'`
+- `base: '/wp-content/themes/{theme-name}/public/build/'`
 
-Set `BASE_PATH` in your theme `.env` file, for example:
-
-```env
-BASE_PATH=/wp-content/themes/your-theme/public/build/
-```
+During `bloom:install`, Bloom auto-detects the theme directory name from the current path (for example, `wp-content/themes/{theme-name}`) and uses that value to build the Vite `base` path.
 
 ## Bedrock vs Non-Bedrock Base Path
 
@@ -93,7 +89,7 @@ BASE_PATH=/wp-content/themes/your-theme/public/build/
 - Non-Bedrock example:
   - `/wp-content/themes/{theme-name}/public/build/`
 
-If your project structure differs, update `BASE_PATH` in `.env` rather than hardcoding the Vite `base`.
+If your project structure differs, adjust `base` manually in Vite.
 
 ## Reinstalling / Updating Stubs
 

@@ -19,6 +19,8 @@ class InstallCommand extends Command
 
     protected string $stubsPath;
 
+    protected ?string $themeName = null;
+
     public function handle(): int
     {
         $this->files = new Filesystem;
@@ -227,7 +229,6 @@ class InstallCommand extends Command
 
     protected function copyProjectRootFiles(): void
     {
-        $this->copyRootStubFile('.env', '.env');
         $this->copyRootStubFile('screenshot.png', 'screenshot.png');
     }
 
@@ -384,21 +385,13 @@ CSS;
 
     protected function patchViteBasePath(string $content): string
     {
-        $basePath = 'process.env.BASE_PATH || \'/\'';
+        $themeName = $this->resolveThemeName();
+        $basePath = "/wp-content/themes/{$themeName}/public/build/";
 
         if (preg_match('/base\s*:\s*[\'"][^\'"]*[\'"]\s*,/', $content)) {
             return (string) preg_replace(
                 '/base\s*:\s*[\'"][^\'"]*[\'"]\s*,/',
-                "base: {$basePath},",
-                $content,
-                1
-            );
-        }
-
-        if (preg_match('/base\s*:\s*process\.env\.BASE_PATH\s*\|\|\s*[\'"][^\'"]*[\'"]\s*,/', $content)) {
-            return (string) preg_replace(
-                '/base\s*:\s*process\.env\.BASE_PATH\s*\|\|\s*[\'"][^\'"]*[\'"]\s*,/',
-                "base: {$basePath},",
+                "base: '{$basePath}',",
                 $content,
                 1
             );
@@ -407,13 +400,32 @@ CSS;
         if (preg_match('/defineConfig\s*\(\s*\{/', $content)) {
             return (string) preg_replace(
                 '/defineConfig\s*\(\s*\{/',
-                "defineConfig({\n  base: {$basePath},",
+                "defineConfig({\n  base: '{$basePath}',",
                 $content,
                 1
             );
         }
 
         return $content;
+    }
+
+    protected function resolveThemeName(): string
+    {
+        if ($this->themeName !== null) {
+            return $this->themeName;
+        }
+
+        $currentPath = str_replace('\\', '/', base_path());
+
+        if (preg_match('#/(?:wp-content|app)/themes/([^/]+)$#', $currentPath, $matches)) {
+            $this->themeName = $matches[1];
+
+            return $this->themeName;
+        }
+
+        $this->themeName = basename(base_path());
+
+        return $this->themeName;
     }
 
     protected function copyStubFile(string $stubRelative, string $destRelative): void
@@ -551,7 +563,7 @@ CSS;
         $this->newLine();
         $this->line('  And set the base path for non-Bedrock Sage themes:');
         $this->newLine();
-        $this->line("    <fg=cyan>base: process.env.BASE_PATH || '/',</>");
+        $this->line("    <fg=cyan>base: '/wp-content/themes/{theme-name}/public/build/',</>");
         $this->newLine();
     }
 
