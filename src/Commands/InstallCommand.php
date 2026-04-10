@@ -319,8 +319,28 @@ CSS;
             $this->files->put($appCssPath, $content);
             $this->components->twoColumnDetail('Patched resources/css/app.css', '<fg=green;options=bold>DONE</>');
         } else {
-            // Customized file — print manual instructions
-            $this->printManualCssInstructions();
+            // Customized file — append imports so install still completes automatically.
+            $toAppend = [];
+
+            if (! str_contains($content, 'bloom-tokens.css')) {
+                $toAppend[] = '@import "./bloom-tokens.css";';
+            }
+
+            if (! str_contains($content, 'bloom-base.css')) {
+                $toAppend[] = '@import "./bloom-base.css";';
+            }
+
+            if (! str_contains($content, '@source "../../Bloom/";')) {
+                $toAppend[] = '@source "../../Bloom/";';
+            }
+
+            if ($toAppend !== []) {
+                $content = rtrim($content)."\n\n".implode("\n", $toAppend)."\n";
+                $this->files->put($appCssPath, $content);
+                $this->components->twoColumnDetail('Patched resources/css/app.css (customized file)', '<fg=green;options=bold>DONE</>');
+            } else {
+                $this->components->twoColumnDetail('resources/css/app.css', '<fg=yellow;options=bold>ALREADY PATCHED</>');
+            }
         }
     }
 
