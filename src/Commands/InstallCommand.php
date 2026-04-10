@@ -38,6 +38,7 @@ class InstallCommand extends Command
         $this->copyImages();
         $this->copyData();
         $this->copyHelpers();
+        $this->copyProjectRootFiles();
         $this->copyBloomConfig();
         $this->patchAppCss();
         $this->patchViteConfig();
@@ -223,6 +224,12 @@ class InstallCommand extends Command
         $this->components->twoColumnDetail('Copied Bloom config → Bloom/config/', '<fg=green;options=bold>DONE</>');
     }
 
+    protected function copyProjectRootFiles(): void
+    {
+        $this->copyPackageRootFile('.env', '.env');
+        $this->copyPackageRootFile('screenshot.png', 'screenshot.png');
+    }
+
     protected function patchAppCss(): void
     {
         $appCssPath = base_path('resources/css/app.css');
@@ -359,13 +366,21 @@ CSS;
 
     protected function patchViteBasePath(string $content): string
     {
-        $themeName = basename(base_path());
-        $basePath = "/wp-content/themes/{$themeName}/public/build/";
+        $basePath = 'process.env.BASE_PATH || \'/\'';
 
         if (preg_match('/base\s*:\s*[\'"][^\'"]*[\'"]\s*,/', $content)) {
             return (string) preg_replace(
                 '/base\s*:\s*[\'"][^\'"]*[\'"]\s*,/',
-                "base: '{$basePath}',",
+                "base: {$basePath},",
+                $content,
+                1
+            );
+        }
+
+        if (preg_match('/base\s*:\s*process\.env\.BASE_PATH\s*\|\|\s*[\'"][^\'"]*[\'"]\s*,/', $content)) {
+            return (string) preg_replace(
+                '/base\s*:\s*process\.env\.BASE_PATH\s*\|\|\s*[\'"][^\'"]*[\'"]\s*,/',
+                "base: {$basePath},",
                 $content,
                 1
             );
@@ -374,7 +389,7 @@ CSS;
         if (preg_match('/defineConfig\s*\(\s*\{/', $content)) {
             return (string) preg_replace(
                 '/defineConfig\s*\(\s*\{/',
-                "defineConfig({\n  base: '{$basePath}',",
+                "defineConfig({\n  base: {$basePath},",
                 $content,
                 1
             );
@@ -395,6 +410,20 @@ CSS;
         $destDir = dirname($dest);
         if (! $this->files->isDirectory($destDir)) {
             $this->files->makeDirectory($destDir, 0755, true);
+        }
+
+        if (! $this->files->exists($dest) || $this->option('force')) {
+            $this->files->copy($src, $dest);
+        }
+    }
+
+    protected function copyPackageRootFile(string $sourceRelative, string $destRelative): void
+    {
+        $src = dirname(__DIR__, 2).'/'.$sourceRelative;
+        $dest = base_path($destRelative);
+
+        if (! $this->files->exists($src)) {
+            return;
         }
 
         if (! $this->files->exists($dest) || $this->option('force')) {
@@ -504,7 +533,7 @@ CSS;
         $this->newLine();
         $this->line('  And set the base path for non-Bedrock Sage themes:');
         $this->newLine();
-        $this->line("    <fg=cyan>base: '/wp-content/themes/{theme-name}/public/build/',</>");
+        $this->line("    <fg=cyan>base: process.env.BASE_PATH || '/',</>");
         $this->newLine();
     }
 
