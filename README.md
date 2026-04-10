@@ -108,3 +108,17 @@ wp acorn bloom:install --diff
 wp acorn bloom:install --force
 ```
 
+## Development
+
+Run code style checks with Laravel Pint:
+
+```bash
+composer run lint
+```
+
+Auto-fix style issues:
+
+```bash
+composer run format
+```
+
