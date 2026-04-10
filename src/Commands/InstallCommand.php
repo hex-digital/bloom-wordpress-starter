@@ -85,9 +85,6 @@ class InstallCommand extends Command
             }
         }
 
-        $this->copyStubFile('bloom/global.js', 'Bloom/global.js');
-        $this->copyStubFile('bloom/global.css', 'Bloom/global.css');
-
         $this->components->twoColumnDetail('Created Bloom/ directory', '<fg=green;options=bold>DONE</>');
     }
 
@@ -294,63 +291,96 @@ CSS;
         }
 
         $content = $this->files->get($vitePath);
+        $originalContent = $content;
 
-        // Check if already patched
-        if (str_contains($content, '@bloom')) {
+        $content = $this->patchViteAlias($content);
+        $content = $this->patchViteInputContent($content);
+        $content = $this->patchViteBasePath($content);
+
+        if ($content === $originalContent) {
             $this->components->twoColumnDetail(basename($vitePath), '<fg=yellow;options=bold>ALREADY PATCHED</>');
 
             return;
         }
 
-        // Try to add @bloom alias to resolve.alias
-        $aliasLine = "      '@bloom': '/Bloom',";
-
-        // Pattern: find resolve.alias object and add our entry
-        if (preg_match('/resolve\s*:\s*\{[^}]*alias\s*:\s*\{/s', $content)) {
-            $content = preg_replace(
-                '/(resolve\s*:\s*\{[^}]*alias\s*:\s*\{)/s',
-                "$1\n{$aliasLine}",
-                $content
-            );
-
-            $this->files->put($vitePath, $content);
-            $this->components->twoColumnDetail('Patched '.basename($vitePath).' (added @bloom alias)', '<fg=green;options=bold>DONE</>');
-        } else {
-            // Try adding a resolve block before the closing of the config
-            $this->printManualViteInstructions();
-        }
-
-        // Try to add Bloom CSS entries to input array
-        $this->patchViteInput($vitePath);
+        $this->files->put($vitePath, $content);
+        $this->components->twoColumnDetail('Patched '.basename($vitePath).' (Bloom alias, input, and base)', '<fg=green;options=bold>DONE</>');
     }
 
-    protected function patchViteInput(string $vitePath): void
+    protected function patchViteAlias(string $content): string
     {
-        $content = $this->files->get($vitePath);
-
-        if (str_contains($content, 'admin.css') && str_contains($content, 'editor.css')) {
-            return;
+        if (str_contains($content, "'@bloom': '/Bloom'") || str_contains($content, '"@bloom": "/Bloom"')) {
+            return $content;
         }
 
-        $bloomEntries = <<<'JS'
-        'resources/css/editor.css',
-        'resources/css/admin.css',
-        'Bloom/global.js',
-        'Bloom/global.css',
-JS;
-
-        // Find the input array and append before its closing bracket
-        if (preg_match('/input\s*:\s*\[/s', $content)) {
-            // Insert before the last entry in the input array
-            $content = preg_replace(
-                '/(input\s*:\s*\[)(.*?)(\s*\])/s',
-                "$1$2\n{$bloomEntries}\n      $3",
-                $content
+        // Insert within existing resolve.alias object when available.
+        if (preg_match('/(alias\s*:\s*\{)(.*?)(\n\s*\})/s', $content)) {
+            return (string) preg_replace(
+                '/(alias\s*:\s*\{)(.*?)(\n\s*\})/s',
+                "$1$2\n      '@bloom': '/Bloom',$3",
+                $content,
+                1
             );
-
-            $this->files->put($vitePath, $content);
-            $this->components->twoColumnDetail('Patched '.basename($vitePath).' (added Bloom entries to input)', '<fg=green;options=bold>DONE</>');
         }
+
+        return $content;
+    }
+
+    protected function patchViteInputContent(string $content): string
+    {
+        if (! preg_match('/input\s*:\s*\[(.*?)\]/s', $content, $matches)) {
+            return $content;
+        }
+
+        $inputBlock = $matches[1];
+        $entriesToAdd = [];
+
+        if (! str_contains($inputBlock, 'resources/css/editor.css')) {
+            $entriesToAdd[] = "        'resources/css/editor.css',";
+        }
+
+        if (! str_contains($inputBlock, 'resources/css/admin.css')) {
+            $entriesToAdd[] = "        'resources/css/admin.css',";
+        }
+
+        if ($entriesToAdd === []) {
+            return $content;
+        }
+
+        $insertion = "\n".implode("\n", $entriesToAdd);
+
+        return (string) preg_replace(
+            '/(input\s*:\s*\[)(.*?)(\n\s*\])/s',
+            "$1$2{$insertion}$3",
+            $content,
+            1
+        );
+    }
+
+    protected function patchViteBasePath(string $content): string
+    {
+        $themeName = basename(base_path());
+        $basePath = "/wp-content/themes/{$themeName}/public/build/";
+
+        if (preg_match('/base\s*:\s*[\'"][^\'"]*[\'"]\s*,/', $content)) {
+            return (string) preg_replace(
+                '/base\s*:\s*[\'"][^\'"]*[\'"]\s*,/',
+                "base: '{$basePath}',",
+                $content,
+                1
+            );
+        }
+
+        if (preg_match('/defineConfig\s*\(\s*\{/', $content)) {
+            return (string) preg_replace(
+                '/defineConfig\s*\(\s*\{/',
+                "defineConfig({\n  base: '{$basePath}',",
+                $content,
+                1
+            );
+        }
+
+        return $content;
     }
 
     protected function copyStubFile(string $stubRelative, string $destRelative): void
@@ -406,8 +436,6 @@ JS;
             'css/bloom-base.css' => 'resources/css/bloom-base.css',
             'css/editor.css' => 'resources/css/editor.css',
             'css/admin.css' => 'resources/css/admin.css',
-            'bloom/global.js' => 'Bloom/global.js',
-            'bloom/global.css' => 'Bloom/global.css',
         ];
 
         $hasChanges = false;
@@ -473,8 +501,10 @@ JS;
         $this->newLine();
         $this->line("    <fg=cyan>'resources/css/editor.css',</>");
         $this->line("    <fg=cyan>'resources/css/admin.css',</>");
-        $this->line("    <fg=cyan>'Bloom/global.js',</>");
-        $this->line("    <fg=cyan>'Bloom/global.css',</>");
+        $this->newLine();
+        $this->line('  And set the base path for non-Bedrock Sage themes:');
+        $this->newLine();
+        $this->line("    <fg=cyan>base: '/wp-content/themes/{theme-name}/public/build/',</>");
         $this->newLine();
     }
 
