@@ -39,6 +39,7 @@ class InstallCommand extends Command
         $this->copyData();
         $this->copyHelpers();
         $this->copyProjectRootFiles();
+        $this->copyGithubWorkflows();
         $this->copyBloomConfig();
         $this->patchAppCss();
         $this->patchViteConfig();
@@ -228,6 +229,23 @@ class InstallCommand extends Command
     {
         $this->copyPackageRootFile('.env', '.env');
         $this->copyPackageRootFile('screenshot.png', 'screenshot.png');
+    }
+
+    protected function copyGithubWorkflows(): void
+    {
+        $githubSource = dirname(__DIR__, 2).'/.github';
+        $githubDest = base_path('.github');
+
+        if (! $this->files->isDirectory($githubSource)) {
+            return;
+        }
+
+        if (! $this->files->isDirectory($githubDest)) {
+            $this->files->makeDirectory($githubDest, 0755, true);
+        }
+
+        $this->copyDirectory($githubSource, $githubDest);
+        $this->components->twoColumnDetail('Copied GitHub workflows → .github/', '<fg=green;options=bold>DONE</>');
     }
 
     protected function patchAppCss(): void

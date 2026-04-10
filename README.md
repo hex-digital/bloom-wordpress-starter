@@ -61,6 +61,7 @@ The `bloom:install` command:
 - creates `Bloom/` directories (`Blocks`, `Components`, `Composers`, `Livewire`, etc.)
 - copies starter files into `resources/views`, `resources/css`, `resources/images`, and `resources/fonts`
 - copies package root files into the theme root (`.env`, `screenshot.png`)
+- copies GitHub automation files into `.github/` (workflows + labeler config)
 - copies Bloom config into `Bloom/config`
 - patches `resources/css/app.css` to include Bloom CSS
 - patches `vite.config.js`/`vite.config.ts` to include Bloom aliases and entries
