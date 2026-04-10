@@ -261,9 +261,31 @@ class InstallCommand extends Command
 
         $content = $this->files->get($appCssPath);
 
+        $hasTokensImport = str_contains($content, 'bloom-tokens.css');
+        $hasBaseImport = str_contains($content, 'bloom-base.css');
+
         // Check if already patched
-        if (str_contains($content, 'bloom-tokens.css')) {
+        if ($hasTokensImport && $hasBaseImport) {
             $this->components->twoColumnDetail('resources/css/app.css', '<fg=yellow;options=bold>ALREADY PATCHED</>');
+
+            return;
+        }
+
+        // If partially patched, append only the missing imports.
+        if ($hasTokensImport || $hasBaseImport) {
+            $missingImports = [];
+
+            if (! $hasTokensImport) {
+                $missingImports[] = '@import "./bloom-tokens.css";';
+            }
+
+            if (! $hasBaseImport) {
+                $missingImports[] = '@import "./bloom-base.css";';
+            }
+
+            $content = rtrim($content)."\n".implode("\n", $missingImports)."\n";
+            $this->files->put($appCssPath, $content);
+            $this->components->twoColumnDetail('Patched resources/css/app.css', '<fg=green;options=bold>DONE</>');
 
             return;
         }
