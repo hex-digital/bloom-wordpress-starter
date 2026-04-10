@@ -227,8 +227,8 @@ class InstallCommand extends Command
 
     protected function copyProjectRootFiles(): void
     {
-        $this->copyPackageRootFile('.env', '.env');
-        $this->copyPackageRootFile('screenshot.png', 'screenshot.png');
+        $this->copyRootStubFile('.env', '.env');
+        $this->copyRootStubFile('screenshot.png', 'screenshot.png');
     }
 
     protected function copyGithubWorkflows(): void
@@ -435,9 +435,9 @@ CSS;
         }
     }
 
-    protected function copyPackageRootFile(string $sourceRelative, string $destRelative): void
+    protected function copyRootStubFile(string $sourceRelative, string $destRelative): void
     {
-        $src = dirname(__DIR__, 2).'/'.$sourceRelative;
+        $src = $this->stubsPath.'/'.$sourceRelative;
         $dest = base_path($destRelative);
 
         if (! $this->files->exists($src)) {
