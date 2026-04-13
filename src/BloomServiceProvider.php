@@ -16,12 +16,48 @@ class BloomServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
+        $this->registerBloomConfig();
+
+        $this->commands(config('bloom.commands', []));
+    }
+
+    protected function registerBloomConfig(): void
+    {
         $this->mergeConfigFrom(__DIR__.'/../config/components.php', 'bloom.components');
         $this->mergeConfigFrom(__DIR__.'/../config/livewire.php', 'bloom.livewire');
         $this->mergeConfigFrom(__DIR__.'/../config/composers.php', 'bloom.composers');
         $this->mergeConfigFrom(__DIR__.'/../config/commands.php', 'bloom.commands');
 
-        $this->commands(config('bloom.commands', []));
+        if (! function_exists('get_theme_file_path')) {
+            return;
+        }
+
+        $themeConfigDir = get_theme_file_path('/Bloom/config');
+        if (! is_dir($themeConfigDir)) {
+            return;
+        }
+
+        $configMap = [
+            'components' => 'bloom.components',
+            'livewire' => 'bloom.livewire',
+            'composers' => 'bloom.composers',
+            'commands' => 'bloom.commands',
+        ];
+
+        foreach ($configMap as $fileName => $configKey) {
+            $themeConfigFile = "{$themeConfigDir}/{$fileName}.php";
+            if (! is_file($themeConfigFile)) {
+                continue;
+            }
+
+            $themeConfig = require $themeConfigFile;
+            if (! is_array($themeConfig)) {
+                continue;
+            }
+
+            // Theme config should override package defaults.
+            config([$configKey => array_replace_recursive(config($configKey, []), $themeConfig)]);
+        }
     }
 
     /**
