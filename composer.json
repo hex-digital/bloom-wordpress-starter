@@ -18,6 +18,7 @@
     "php": ">=8.2",
     "roots/acorn": "^6.0",
     "illuminate/process": "^13.0",
+    "hex-digital/bloom-modules": "dev-main",
     "livewire/livewire": "^3.4",
     "log1x/acf-composer": "^3.4",
     "log1x/navi": "^3.1",
@@ -32,7 +33,6 @@
     }
   ],
   "require-dev": {
-    "hex-digital/bloom-modules": "dev-main",
     "laravel/pint": "^1.29"
   },
   "scripts": {
