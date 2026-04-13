@@ -36,7 +36,7 @@ class AddModules extends Command
     protected array $configFiles = [
         'components.php',
         'livewire.php',
-        'composer.php',
+        'composers.php',
     ];
 
     /**
