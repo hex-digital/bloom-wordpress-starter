@@ -4,10 +4,8 @@ declare(strict_types=1);
 
 namespace Bloom\Commands;
 
-use Bloom\Constants\PostType;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Process;
-
 use function Laravel\Prompts\error;
 use function Laravel\Prompts\info;
 use function Laravel\Prompts\intro;
@@ -140,7 +138,13 @@ class BloomInit extends Command
 
     private function handleContentGeneration(): void
     {
-        $postTypes = PostType::getConstants();
+        if (! class_exists(\Bloom\Constants\PostType::class)) {
+            error('Bloom\\Constants\\PostType not found. Run `wp acorn bloom:install` to scaffold Bloom constants.');
+
+            return;
+        }
+
+        $postTypes = \Bloom\Constants\PostType::getConstants();
 
         $this->info('Available Post Types:');
         foreach ($postTypes as $key => $value) {

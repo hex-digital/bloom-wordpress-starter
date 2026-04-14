@@ -1,0 +1,5 @@
+@import "tailwindcss" theme(static);
+@import "bloom-base.css";
+@source "../views/";
+@source "../../app/";
+@source "../../bloom/";

@@ -26,7 +26,7 @@ class BloomServiceProvider extends ServiceProvider
             \Bloom\Commands\InstallCommand::class,
         ]);
 
-        // Allow project-level Bloom/config/commands.php to append extra commands.
+        // Allow project-level Bloom/config/commands.php to register extra commands.
         $this->commands(config('bloom.commands', []));
     }
 
@@ -75,20 +75,18 @@ class BloomServiceProvider extends ServiceProvider
         $this->initBloomComposers();
         $this->initBloomDirectives();
         $this->initBloomLivewireComponents();
-        $this->initPublishables();
     }
 
     protected function initBloomViews(): void
     {
-        // Package default views (bloom:: namespace)
-        $this->loadViewsFrom(__DIR__.'/../resources/views', 'bloom');
+        if (! function_exists('get_theme_file_path')) {
+            return;
+        }
 
-        // Theme's Bloom/ directory for project-level overrides
-        if (function_exists('get_theme_file_path')) {
-            $bloomDir = get_theme_file_path('/Bloom');
-            if (is_dir($bloomDir)) {
-                View::addLocation($bloomDir);
-            }
+        // Register the theme-level Bloom views directory for composer/view resolution.
+        $bloomViewsDir = get_theme_file_path('/Bloom/views');
+        if (is_dir($bloomViewsDir)) {
+            View::addLocation($bloomViewsDir);
         }
     }
 
@@ -136,34 +134,4 @@ class BloomServiceProvider extends ServiceProvider
         Blade::directive('dd', fn ($expression) => "<?php var_dump({$expression}); die(); ?>");
     }
 
-    protected function initPublishables(): void
-    {
-        $this->publishes([
-            __DIR__.'/../stubs/views' => resource_path('views'),
-        ], 'bloom-views');
-
-        $this->publishes([
-            __DIR__.'/../stubs/css' => resource_path('css'),
-        ], 'bloom-css');
-
-        $this->publishes([
-            __DIR__.'/../stubs/fonts' => resource_path('fonts'),
-        ], 'bloom-fonts');
-
-        $this->publishes([
-            __DIR__.'/../stubs/images' => resource_path('images'),
-        ], 'bloom-images');
-
-        $this->publishes([
-            __DIR__.'/../stubs/bloom' => base_path('Bloom'),
-        ], 'bloom-scaffold');
-
-        $this->publishes([
-            __DIR__.'/../bloom-config' => base_path('Bloom/config'),
-        ], 'bloom-config');
-
-        $this->publishes([
-            __DIR__.'/../app-config' => config_path(),
-        ], 'bloom-app-config');
-    }
 }

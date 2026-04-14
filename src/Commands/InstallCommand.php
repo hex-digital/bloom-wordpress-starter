@@ -21,6 +21,13 @@ class InstallCommand extends Command
 
     protected ?string $themeName = null;
 
+    protected array $stubRootDestinations = [
+        'bloom' => 'Bloom',
+        'app' => 'app',
+        'resources' => 'resources',
+        'root' => '',
+    ];
+
     public function handle(): int
     {
         $this->files = new Filesystem;
@@ -33,17 +40,7 @@ class InstallCommand extends Command
         $this->components->info('Bloom Installer');
         $this->newLine();
 
-        $this->scaffoldBloomDirectory();
-        $this->copyCSS();
-        $this->copyViews();
-        $this->copyFonts();
-        $this->copyImages();
-        $this->copyData();
-        $this->copyHelpers();
-        $this->copyProjectRootFiles();
-        $this->copyGithubWorkflows();
-        $this->copyBloomConfig();
-        $this->copyAppConfig();
+        $this->copyStubRoots();
         $this->patchComposerAutoload();
         $this->patchAppCss();
         $this->patchViteConfig();
@@ -72,210 +69,20 @@ class InstallCommand extends Command
         return dirname(__DIR__, 2).'/stubs';
     }
 
-    protected function scaffoldBloomDirectory(): void
+    protected function copyStubRoots(): void
     {
-        $bloomDir = base_path('Bloom');
-
-        $dirs = [
-            'Blocks',
-            'Components',
-            'Composers',
-            'Livewire',
-        ];
-
-        foreach ($dirs as $dir) {
-            $path = $bloomDir.'/'.$dir;
-            if (! $this->files->isDirectory($path)) {
-                $this->files->makeDirectory($path, 0755, true);
-                $this->files->put($path.'/.gitkeep', '');
+        foreach ($this->stubRootDestinations as $stubRoot => $destinationRoot) {
+            $sourcePath = "{$this->stubsPath}/{$stubRoot}";
+            if (! $this->files->isDirectory($sourcePath)) {
+                continue;
             }
+
+            $destinationPath = $destinationRoot === '' ? base_path() : base_path($destinationRoot);
+            $this->copyDirectory($sourcePath, $destinationPath);
+
+            $label = $destinationRoot === '' ? './' : "{$destinationRoot}/";
+            $this->components->twoColumnDetail("Copied stubs/{$stubRoot} → {$label}", '<fg=green;options=bold>DONE</>');
         }
-
-        $this->components->twoColumnDetail('Created Bloom/ directory', '<fg=green;options=bold>DONE</>');
-    }
-
-    protected function copyCSS(): void
-    {
-        $cssFiles = [
-            'css/bloom-tokens.css' => 'resources/css/bloom-tokens.css',
-            'css/bloom-base.css' => 'resources/css/bloom-base.css',
-            'css/editor.css' => 'resources/css/editor.css',
-            'css/admin.css' => 'resources/css/admin.css',
-        ];
-
-        // Ensure resources/css directory exists
-        $cssDir = base_path('resources/css');
-        if (! $this->files->isDirectory($cssDir)) {
-            $this->files->makeDirectory($cssDir, 0755, true);
-        }
-
-        foreach ($cssFiles as $stub => $dest) {
-            $this->copyStubFile($stub, $dest);
-            $this->components->twoColumnDetail(
-                'Copied '.basename($dest).' → '.$dest,
-                '<fg=green;options=bold>DONE</>'
-            );
-        }
-    }
-
-    protected function copyViews(): void
-    {
-        $viewsStubDir = $this->stubsPath.'/views';
-        $viewsDest = base_path('resources/views');
-
-        if (! $this->files->isDirectory($viewsStubDir)) {
-            return;
-        }
-
-        $this->copyDirectory($viewsStubDir, $viewsDest);
-
-        $this->components->twoColumnDetail('Copied starter views → resources/views/', '<fg=green;options=bold>DONE</>');
-    }
-
-    protected function copyFonts(): void
-    {
-        $fontsStubDir = $this->stubsPath.'/fonts';
-        $fontsDest = base_path('resources/fonts');
-
-        if (! $this->files->isDirectory($fontsStubDir)) {
-            return;
-        }
-
-        if (! $this->files->isDirectory($fontsDest)) {
-            $this->files->makeDirectory($fontsDest, 0755, true);
-        }
-
-        $this->copyDirectory($fontsStubDir, $fontsDest);
-
-        $this->components->twoColumnDetail('Copied fonts → resources/fonts/', '<fg=green;options=bold>DONE</>');
-    }
-
-    protected function copyImages(): void
-    {
-        $imagesStubDir = $this->stubsPath.'/images';
-        $imagesDest = base_path('resources/images');
-
-        if (! $this->files->isDirectory($imagesStubDir)) {
-            return;
-        }
-
-        if (! $this->files->isDirectory($imagesDest)) {
-            $this->files->makeDirectory($imagesDest, 0755, true);
-        }
-
-        $this->copyDirectory($imagesStubDir, $imagesDest);
-
-        $this->components->twoColumnDetail('Copied images → resources/images/', '<fg=green;options=bold>DONE</>');
-    }
-
-    protected function copyData(): void
-    {
-        $dataStubDir = $this->stubsPath.'/Data';
-        $dataDest = base_path('Bloom/Data');
-
-        if (! $this->files->isDirectory($dataStubDir)) {
-            return;
-        }
-
-        if (! $this->files->isDirectory($dataDest)) {
-            $this->files->makeDirectory($dataDest, 0755, true);
-        }
-
-        $this->copyDirectory($dataStubDir, $dataDest);
-
-        $this->components->twoColumnDetail('Copied Data → Bloom/Data/', '<fg=green;options=bold>DONE</>');
-    }
-
-    protected function copyHelpers(): void
-    {
-        $helpersStubDir = $this->stubsPath.'/Helpers';
-        $helpersDest = base_path('Bloom/Helpers');
-
-        if (! $this->files->isDirectory($helpersStubDir)) {
-            return;
-        }
-
-        if (! $this->files->isDirectory($helpersDest)) {
-            $this->files->makeDirectory($helpersDest, 0755, true);
-        }
-
-        $this->copyDirectory($helpersStubDir, $helpersDest);
-
-        $this->components->twoColumnDetail('Copied Helpers → Bloom/Helpers/', '<fg=green;options=bold>DONE</>');
-    }
-
-    protected function copyBloomConfig(): void
-    {
-        $configSrc = dirname(__DIR__, 2).'/bloom-config';
-        $configDest = base_path('Bloom/config');
-
-        if (! $this->files->isDirectory($configDest)) {
-            $this->files->makeDirectory($configDest, 0755, true);
-        }
-
-        $configFiles = ['commands.php', 'components.php', 'composers.php', 'livewire.php'];
-
-        foreach ($configFiles as $file) {
-            $src = $configSrc.'/'.$file;
-            $dest = $configDest.'/'.$file;
-
-            if ($this->files->exists($src)) {
-                if (! $this->files->exists($dest) || $this->option('force')) {
-                    $this->files->copy($src, $dest);
-                }
-            }
-        }
-
-        $this->components->twoColumnDetail('Copied Bloom config → Bloom/config/', '<fg=green;options=bold>DONE</>');
-    }
-
-    protected function copyAppConfig(): void
-    {
-        $configSrc = dirname(__DIR__, 2).'/app-config';
-        $configDest = base_path('config');
-
-        if (! $this->files->isDirectory($configSrc)) {
-            return;
-        }
-
-        if (! $this->files->isDirectory($configDest)) {
-            $this->files->makeDirectory($configDest, 0755, true);
-        }
-
-        $configFiles = $this->files->files($configSrc);
-
-        foreach ($configFiles as $file) {
-            $src = $file->getPathname();
-            $dest = $configDest.'/'.$file->getFilename();
-
-            if (! $this->files->exists($dest) || $this->option('force')) {
-                $this->files->copy($src, $dest);
-            }
-        }
-
-        $this->components->twoColumnDetail('Copied app config → config/', '<fg=green;options=bold>DONE</>');
-    }
-
-    protected function copyProjectRootFiles(): void
-    {
-        $this->copyRootStubFile('screenshot.png', 'screenshot.png');
-    }
-
-    protected function copyGithubWorkflows(): void
-    {
-        $githubSource = dirname(__DIR__, 2).'/.github';
-        $githubDest = base_path('.github');
-
-        if (! $this->files->isDirectory($githubSource)) {
-            return;
-        }
-
-        if (! $this->files->isDirectory($githubDest)) {
-            $this->files->makeDirectory($githubDest, 0755, true);
-        }
-
-        $this->copyDirectory($githubSource, $githubDest);
-        $this->components->twoColumnDetail('Copied GitHub workflows → .github/', '<fg=green;options=bold>DONE</>');
     }
 
     protected function patchAppCss(): void
@@ -497,39 +304,6 @@ class InstallCommand extends Command
         return $this->themeName;
     }
 
-    protected function copyStubFile(string $stubRelative, string $destRelative): void
-    {
-        $src = $this->stubsPath.'/'.$stubRelative;
-        $dest = base_path($destRelative);
-
-        if (! $this->files->exists($src)) {
-            return;
-        }
-
-        $destDir = dirname($dest);
-        if (! $this->files->isDirectory($destDir)) {
-            $this->files->makeDirectory($destDir, 0755, true);
-        }
-
-        if (! $this->files->exists($dest) || $this->option('force')) {
-            $this->files->copy($src, $dest);
-        }
-    }
-
-    protected function copyRootStubFile(string $sourceRelative, string $destRelative): void
-    {
-        $src = $this->stubsPath.'/'.$sourceRelative;
-        $dest = base_path($destRelative);
-
-        if (! $this->files->exists($src)) {
-            return;
-        }
-
-        if (! $this->files->exists($dest) || $this->option('force')) {
-            $this->files->copy($src, $dest);
-        }
-    }
-
     protected function copyDirectory(string $src, string $dest): void
     {
         $files = $this->files->allFiles($src);
@@ -560,10 +334,10 @@ class InstallCommand extends Command
         $this->newLine();
 
         $mappings = [
-            'css/bloom-tokens.css' => 'resources/css/bloom-tokens.css',
-            'css/bloom-base.css' => 'resources/css/bloom-base.css',
-            'css/editor.css' => 'resources/css/editor.css',
-            'css/admin.css' => 'resources/css/admin.css',
+            'resources/css/bloom-tokens.css' => 'resources/css/bloom-tokens.css',
+            'resources/css/bloom-base.css' => 'resources/css/bloom-base.css',
+            'resources/css/editor.css' => 'resources/css/editor.css',
+            'resources/css/admin.css' => 'resources/css/admin.css',
         ];
 
         $hasChanges = false;
