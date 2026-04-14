@@ -27,7 +27,7 @@ class BloomServiceProvider extends ServiceProvider
         ]);
 
         // Allow project-level Bloom/config/commands.php to register extra commands.
-        $this->commands(config('bloom.commands', []));
+        $this->commands($this->normalizeCommandClasses(config('bloom.commands', [])));
     }
 
     protected function registerBloomConfig(): void
@@ -62,6 +62,33 @@ class BloomServiceProvider extends ServiceProvider
             // Theme config should override package defaults.
             config([$configKey => array_replace_recursive(config($configKey, []), $themeConfig)]);
         }
+    }
+
+    /**
+     * Backward compatibility for older theme configs that still reference Bloom\Commands\*.
+     *
+     * @param  array<int, string>  $commands
+     * @return array<int, string>
+     */
+    protected function normalizeCommandClasses(array $commands): array
+    {
+        $normalized = [];
+
+        foreach ($commands as $command) {
+            if (! is_string($command) || $command === '') {
+                continue;
+            }
+
+            $mappedCommand = str_starts_with($command, 'Bloom\\Commands\\')
+                ? str_replace('Bloom\\Commands\\', 'HexDigital\\Bloom\\Commands\\', $command)
+                : $command;
+
+            if (class_exists($mappedCommand)) {
+                $normalized[] = $mappedCommand;
+            }
+        }
+
+        return $normalized;
     }
 
     /**
