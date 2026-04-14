@@ -1,4 +1,11 @@
-# Bloom for Sage
+# 🌿 Bloom
+
+<p>
+  <strong>WordPress starter theme with a modern development workflow</strong>
+  <br />
+  Built by Hex Digital - https://www.hexdigital.com
+</p>
+
 
 Bloom is an opinionated starter layer for Roots Sage themes. It scaffolds a `Bloom/` directory, starter view files, CSS tokens/base styles, helper classes, and config used by the Bloom workflow.
 
