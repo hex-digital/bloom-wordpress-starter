@@ -18,64 +18,6 @@ return [
     */
 
     'post' => [
-        PostType::INNOVATION => [
-            'enter_title_here' => 'Enter innovation title',
-            'menu_icon' => 'dashicons-heart',
-            'supports' => ['title', 'editor', 'revisions', 'thumbnail'],
-            'show_in_rest' => true,
-            'has_archive' => false,
-            'labels' => [
-                'singular' => 'Innovation',
-                'plural' => 'Innovations',
-            ],
-        ],
-        PostType::FELLOWS_ALUMNI  => [
-            'enter_title_here' => 'Enter Individual\'s Name',
-            'menu_icon' => 'dashicons-groups',
-            'supports' => ['title', 'editor', 'revisions', 'thumbnail'],
-            'show_in_rest' => true,
-            'has_archive' => false,
-            'labels' => [
-                'singular' => 'Individual',
-                'plural' => 'Fellows & Alumni',
-                'slug' => 'fellows-alumni',
-            ],
-        ],
-        PostType::MENTORS  => [
-            'enter_title_here' => 'Enter Mentor\'s Name',
-            'menu_icon' => 'dashicons-groups',
-            'supports' => ['title', 'editor', 'revisions', 'thumbnail'],
-            'show_in_rest' => true,
-            'has_archive' => false,
-            'labels' => [
-                'singular' => 'Mentor',
-                'plural' => 'Mentors',
-            ],
-        ],
-        PostType::TEAM  => [
-            'enter_title_here' => 'Enter Team Member\'s Name',
-            'menu_icon' => 'dashicons-groups',
-            'supports' => ['title', 'editor', 'revisions', 'thumbnail'],
-            'show_in_rest' => true,
-            'has_archive' => false,
-            'labels' => [
-                'singular' => 'Team Member',
-                'plural' => 'Team',
-            ],
-        ],
-        PostType::TABBED_CONTENT => [
-            'enter_title_here' => 'Enter Title',
-            'menu_icon' => 'dashicons-table-col-after',
-            'supports' => ['title', 'editor', 'author', 'revisions'],
-            'show_in_rest' => true,
-            'publicly_queryable' => false,
-            'exclude_from_search' => true,
-            'has_archive' => false,
-            'labels' => [
-                'singular' => 'Tabbed Content',
-                'plural' => 'Tabbed Content',
-            ]
-        ]
     ],
 
     /*
@@ -89,33 +31,6 @@ return [
     */
 
     'taxonomy' => [
-        Taxonomy::FUNCTION => [
-            'links' => [PostType::INNOVATION, PostType::FELLOWS_ALUMNI],
-            'meta_box' => 'simple',
-        ],
-        Taxonomy::CARE_SETTING => [
-            'links' => [PostType::INNOVATION, PostType::FELLOWS_ALUMNI],
-            'meta_box' => 'simple',
-        ],
-        Taxonomy::PATHWAY => [
-            'links' => [PostType::INNOVATION, PostType::FELLOWS_ALUMNI],
-            'meta_box' => 'simple',
-        ],
-        Taxonomy::ARTICLE_TYPE => [
-            'links' => [PostType::POST],
-            'meta_box' => 'simple',
-        ],
-        Taxonomy::EXPERTISE_SUPPORT => [
-            'links' => [PostType::MENTORS],
-            'meta_box' => 'simple',
-        ],
-        Taxonomy::MENTOR_EXPERIENCE => [
-            'links' => [PostType::MENTORS],
-            'meta_box' => 'simple',
-        ],
-
-        'post_tag' => false,
-        'category' => false,
     ],
 
     /*
@@ -162,10 +77,6 @@ return [
         'bloom-inner' => [
             'title' => 'Bloom - Inner blocks',
             'icon' => 'layout',
-        ],
-        'bloom-section' => [
-            'title' => 'Bloom - Whole Section',
-            'icon' => 'align-center',
         ],
     ],
 
