@@ -18,16 +18,20 @@ class BloomServiceProvider extends ServiceProvider
     {
         $this->registerBloomConfig();
 
+        // Always register installer/module commands so fresh projects can bootstrap Bloom/config.
+        $this->commands([
+            \Bloom\Commands\AddModules::class,
+            \Bloom\Commands\MakeModule::class,
+            \Bloom\Commands\BloomInit::class,
+            \Bloom\Commands\InstallCommand::class,
+        ]);
+
+        // Allow project-level Bloom/config/commands.php to append extra commands.
         $this->commands(config('bloom.commands', []));
     }
 
     protected function registerBloomConfig(): void
     {
-        $this->mergeConfigFrom(__DIR__.'/../config/components.php', 'bloom.components');
-        $this->mergeConfigFrom(__DIR__.'/../config/livewire.php', 'bloom.livewire');
-        $this->mergeConfigFrom(__DIR__.'/../config/composers.php', 'bloom.composers');
-        $this->mergeConfigFrom(__DIR__.'/../config/commands.php', 'bloom.commands');
-
         if (! function_exists('get_theme_file_path')) {
             return;
         }
@@ -155,7 +159,11 @@ class BloomServiceProvider extends ServiceProvider
         ], 'bloom-scaffold');
 
         $this->publishes([
-            __DIR__.'/../config' => base_path('Bloom/config'),
+            __DIR__.'/../bloom-config' => base_path('Bloom/config'),
         ], 'bloom-config');
+
+        $this->publishes([
+            __DIR__.'/../app-config' => config_path(),
+        ], 'bloom-app-config');
     }
 }

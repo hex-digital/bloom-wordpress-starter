@@ -43,11 +43,13 @@ class InstallCommand extends Command
         $this->copyProjectRootFiles();
         $this->copyGithubWorkflows();
         $this->copyBloomConfig();
+        $this->copyAppConfig();
+        $this->patchComposerAutoload();
         $this->patchAppCss();
         $this->patchViteConfig();
 
         $this->newLine();
-        $this->components->info('Done! Run: npm install && npm run build');
+        $this->components->info('Done! Run: composer dump-autoload && npm install && npm run build');
 
         return self::SUCCESS;
     }
@@ -204,7 +206,7 @@ class InstallCommand extends Command
 
     protected function copyBloomConfig(): void
     {
-        $configSrc = dirname(__DIR__, 2).'/config';
+        $configSrc = dirname(__DIR__, 2).'/bloom-config';
         $configDest = base_path('Bloom/config');
 
         if (! $this->files->isDirectory($configDest)) {
@@ -225,6 +227,33 @@ class InstallCommand extends Command
         }
 
         $this->components->twoColumnDetail('Copied Bloom config → Bloom/config/', '<fg=green;options=bold>DONE</>');
+    }
+
+    protected function copyAppConfig(): void
+    {
+        $configSrc = dirname(__DIR__, 2).'/app-config';
+        $configDest = base_path('config');
+
+        if (! $this->files->isDirectory($configSrc)) {
+            return;
+        }
+
+        if (! $this->files->isDirectory($configDest)) {
+            $this->files->makeDirectory($configDest, 0755, true);
+        }
+
+        $configFiles = $this->files->files($configSrc);
+
+        foreach ($configFiles as $file) {
+            $src = $file->getPathname();
+            $dest = $configDest.'/'.$file->getFilename();
+
+            if (! $this->files->exists($dest) || $this->option('force')) {
+                $this->files->copy($src, $dest);
+            }
+        }
+
+        $this->components->twoColumnDetail('Copied app config → config/', '<fg=green;options=bold>DONE</>');
     }
 
     protected function copyProjectRootFiles(): void
@@ -327,6 +356,50 @@ class InstallCommand extends Command
 
         $this->files->put($vitePath, $content);
         $this->components->twoColumnDetail('Patched '.basename($vitePath).' (Bloom alias, input, and base)', '<fg=green;options=bold>DONE</>');
+    }
+
+    protected function patchComposerAutoload(): void
+    {
+        $composerJsonPath = base_path('composer.json');
+
+        if (! $this->files->exists($composerJsonPath)) {
+            $this->components->warn('Could not find composer.json. Please add `Bloom\\\\` => `Bloom/` manually.');
+
+            return;
+        }
+
+        $decoded = json_decode($this->files->get($composerJsonPath), true);
+
+        if (! is_array($decoded)) {
+            $this->components->warn('Could not parse composer.json. Please add `Bloom\\\\` => `Bloom/` manually.');
+
+            return;
+        }
+
+        $decoded['autoload'] ??= [];
+        $decoded['autoload']['psr-4'] ??= [];
+
+        if (
+            isset($decoded['autoload']['psr-4']['Bloom\\'])
+            && $decoded['autoload']['psr-4']['Bloom\\'] === 'Bloom/'
+        ) {
+            $this->components->twoColumnDetail('composer.json autoload Bloom\\', '<fg=yellow;options=bold>ALREADY PATCHED</>');
+
+            return;
+        }
+
+        $decoded['autoload']['psr-4']['Bloom\\'] = 'Bloom/';
+        ksort($decoded['autoload']['psr-4']);
+
+        $encoded = json_encode($decoded, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+        if (! is_string($encoded)) {
+            $this->components->warn('Could not encode composer.json. Please add `Bloom\\\\` => `Bloom/` manually.');
+
+            return;
+        }
+
+        $this->files->put($composerJsonPath, $encoded."\n");
+        $this->components->twoColumnDetail('Patched composer.json (Bloom\\ autoload)', '<fg=green;options=bold>DONE</>');
     }
 
     protected function patchViteAlias(string $content): string

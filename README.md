@@ -62,9 +62,34 @@ The `bloom:install` command:
 - copies starter files into `resources/views`, `resources/css`, `resources/images`, and `resources/fonts`
 - copies package root files into the theme root (`screenshot.png`)
 - copies GitHub automation files into `.github/` (workflows + labeler config)
-- copies Bloom config into `Bloom/config`
+- copies Bloom config from `bloom-config/` into `Bloom/config`
+- copies app-level config from `app-config/` into root `config/`
 - patches `resources/css/app.css` to include Bloom CSS
 - patches `vite.config.js`/`vite.config.ts` to include Bloom aliases and entries
+- patches `composer.json` with `Bloom\\ => Bloom/` autoload when missing
+
+Config files are copied only when missing. Use `wp acorn bloom:install --force` to overwrite existing files.
+
+## Config Source vs Destination
+
+Bloom keeps config in two package source directories:
+
+- `bloom-config/` (published/scaffolded to `Bloom/config/`)
+- `app-config/` (published/scaffolded to root `config/`)
+
+Both destinations are named `config`, but they are separated by location and purpose:
+
+- `Bloom/config/*` is Bloom runtime configuration consumed by the package.
+- `config/*` is app-level Acorn/Laravel configuration.
+
+## Publish Tags
+
+You can publish config sets independently:
+
+```bash
+wp acorn vendor:publish --tag=bloom-config
+wp acorn vendor:publish --tag=bloom-app-config
+```
 
 ## Vite Updates Applied by Installer
 
