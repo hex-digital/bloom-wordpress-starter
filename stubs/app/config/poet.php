@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
-use Bloom\bloom\Constants\PostType;
-use Bloom\bloom\Constants\Taxonomy;
+use Bloom\Constants\PostType;
+use Bloom\Constants\Taxonomy;
 
 return [
 

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Bloom\bloom\Helpers;
+namespace Bloom\Helpers;
 
 use function Bloom\Helpers\get_post_type;
 use function Bloom\Helpers\get_post_type_object;

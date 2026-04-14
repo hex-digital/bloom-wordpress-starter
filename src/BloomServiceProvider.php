@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Bloom;
+namespace HexDigital\Bloom;
 
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\View;
@@ -20,10 +20,10 @@ class BloomServiceProvider extends ServiceProvider
 
         // Always register installer/module commands so fresh projects can bootstrap Bloom/config.
         $this->commands([
-            \Bloom\Commands\AddModules::class,
-            \Bloom\Commands\MakeModule::class,
-            \Bloom\Commands\BloomInit::class,
-            \Bloom\Commands\InstallCommand::class,
+            \HexDigital\Bloom\Commands\AddModules::class,
+            \HexDigital\Bloom\Commands\MakeModule::class,
+            \HexDigital\Bloom\Commands\BloomInit::class,
+            \HexDigital\Bloom\Commands\InstallCommand::class,
         ]);
 
         // Allow project-level Bloom/config/commands.php to register extra commands.

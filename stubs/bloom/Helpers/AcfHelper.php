@@ -1,6 +1,6 @@
 <?php
 
-namespace Bloom\bloom\Helpers;
+namespace Bloom\Helpers;
 
 use function Bloom\Helpers\add_query_arg;
 use function Bloom\Helpers\get_field;

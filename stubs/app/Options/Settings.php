@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Bloom\app\Options;
+namespace App\Options;
 
 use Log1x\AcfComposer\Options as Field;
 use StoutLogic\AcfBuilder\FieldsBuilder;

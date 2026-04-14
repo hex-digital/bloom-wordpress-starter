@@ -11,7 +11,7 @@
   ],
   "autoload": {
     "psr-4": {
-      "Bloom\\": "src/"
+      "HexDigital\\Bloom\\": "src/"
     }
   },
   "require": {
@@ -42,7 +42,7 @@
   "extra": {
     "acorn": {
       "providers": [
-        "Bloom\\BloomServiceProvider"
+        "HexDigital\\Bloom\\BloomServiceProvider"
       ]
     }
   },

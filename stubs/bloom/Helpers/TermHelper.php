@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Bloom\bloom\Helpers;
+namespace Bloom\Helpers;
 
 use WP_Term;
 use function get_the_terms;

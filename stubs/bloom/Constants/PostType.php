@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Bloom\bloom\Constants;
+namespace Bloom\Constants;
 
 class PostType extends AbstractConstant
 {
