@@ -1,4 +1,4 @@
-# 🌿 Bloom
+# 🌿 Bloom - WIP and likely to chanage
 
 <p>
   <strong>WordPress starter theme with a modern development workflow</strong>
