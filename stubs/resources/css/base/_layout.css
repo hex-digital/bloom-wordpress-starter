@@ -1,0 +1,48 @@
+:root {
+  --wrapper-max-width: 1200px;
+  --wrapper-padding: 16px;
+  --headerHeight: 60px;
+  --headerMargin: var(--spacing-12);
+  --headerTotal: calc(var(--headerHeight) + var(--headerMargin));
+
+  --gap-center: 24px;
+  --gap-large: 40px;
+  --gap-medium: 24px;
+  --gap-small: 16px;
+  --gap-tiny: 8px;
+  --gap-grid: 12px;
+
+  --padding-vertical: 40px;
+  --padding-vertical-inner: 24px;
+  --padding-vertical-card: 16px;
+
+  @media (--breakpoint-desk) {
+    --wrapper-padding: 40px;
+    --gap-center: 32px;
+    --gap-large: 56px;
+    --gap-medium: 32px;
+    --gap-small: 20px;
+    --gap-grid: 24px;
+
+    --padding-vertical: 64px;
+    --padding-vertical-inner: 40px;
+    --padding-vertical-card: 24px;
+  }
+}
+
+.o-cluster {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--cluster-gap, 1rem);
+}
+
+.c-section {
+  &.c-theme--light {
+    backgroud-color: var(--background-primary);
+  }
+
+  &.c-theme--mid {
+    background-color: var(--background-secondary);
+  }
+}

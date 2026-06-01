@@ -1,5 +1,71 @@
 @import "tailwindcss" theme(static);
-@import "bloom-base.css";
-@source "../views/";
-@source "../../app/";
-@source "../../bloom/";
+@import "./bloom-base.css";
+@import "./base/_forms.css";
+@import "./base/_page.css";
+@plugin "@tailwindcss/typography";
+
+@source "../../app/**/*.php";
+@source "../**/*.blade.php";
+@source "../**/*.js";
+@source "../../Bloom/**/*.css";
+
+.prose {
+    line-height: 1.4;
+    color: var(--text-secondary);
+    margin-inline: auto;
+    font-size: 18px;
+}
+
+.nav-links {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+
+    a {
+        text-decoration: none !important;
+    }
+
+    .next,
+    .prev {
+        &.page-numbers {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            width: unset;
+            height: unset;
+            background: unset;
+            &:hover {
+                background: none;
+                color: var(--color-success);
+            }
+        }
+    }
+
+    .next {
+        margin-left: 24px;
+    }
+
+    .prev {
+        margin-right: 24px;
+    }
+
+    .page-numbers {
+        border-radius: 4px;
+        font-size: 16px;
+        width: 32px;
+        height: 32px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: var(--color-grey);
+        color: var(--color-black);
+
+        &:hover,
+        &.current {
+            background: var(--color-success);
+            color: var(--color-black);
+        }
+    }
+}
+

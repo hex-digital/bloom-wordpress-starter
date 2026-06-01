@@ -1,0 +1,5 @@
+@define-mixin transition $property, $duration: var(--duration-tortoise), $timing: var(--ease-in-out) {
+  transition-property: $property;
+  transition-duration: $duration;
+  transition-timing-function: $timing;
+}

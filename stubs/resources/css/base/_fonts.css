@@ -1,0 +1,23 @@
+@font-face {
+  font-display: swap;
+  font-style: normal;
+  font-weight: 400;
+  font-family: "Roboto";
+  src: url("../../fonts/open-sans-regular.woff2") format("woff2");
+}
+
+@font-face {
+  font-display: swap;
+  font-style: normal;
+  font-weight: 500;
+  font-family: "Roboto";
+  src: url("../../fonts/open-sans-500.woff2") format("woff2");
+}
+
+@font-face {
+  font-display: swap;
+  font-style: normal;
+  font-weight: 700;
+  font-family: "Roboto";
+  src: url("../../fonts/open-sans-700.woff2") format("woff2");
+}

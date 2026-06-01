@@ -1,0 +1,147 @@
+
+/* ==========================================================================
+   Forms
+   ========================================================================== */
+
+input:not([type="checkbox"], [type="radio"], [type="button"], [type="submit"], [type="range"], [type="color"]),
+textarea,
+select {
+  display: block;
+  border-radius: var(--field-border-radius);
+  padding: var(--field-padding);
+  appearance: none;
+  border: solid var(--field-border-width) var(--field-border-color);
+  background: var(--field-background);
+  color: var(--field-color);
+
+  &:hover {
+    border-color: var(--field-border-color-hover);
+    background: var(--field-background-hover);
+  }
+
+  &:focus {
+    border-color: var(--field-border-color-focus);
+    background: var(--field-background-focus);
+    outline: none;
+  }
+
+  &::placeholder {
+    color: var(--field-placeholder);
+  }
+
+  &:disabled,
+  &[readonly] {
+    opacity: 0.75;
+  }
+}
+
+select {
+  background-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><path fill='none' stroke='black' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right var(--spacing-10) center;
+  background-size: 16px 12px;
+
+  &[multiple],
+  &[size]:not([size="1"]) {
+    padding-right: var(--spacing-10);
+    background-image: none;
+  }
+}
+
+input[type="checkbox"],
+input[type="radio"] {
+  width: var(--checkbox-size);
+  height: var(--checkbox-size);
+  vertical-align: middle;
+  background-color: var(--checkbox-background);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  border: solid var(--field-border-width) var(--field-border-color);
+  appearance: none;
+  print-color-adjust: exact;
+  cursor: pointer;
+
+  &:active {
+    filter: brightness(90%);
+  }
+
+  &:hover {
+    border-color: var(--checkbox-border-hover);
+    background-color: var(--checkbox-background-hover);
+  }
+
+  &:checked {
+    background-color: var(--checkbox-background-checked);
+    border-color: var(--checkbox-border-checked);
+  }
+
+  &:disabled {
+    pointer-events: none;
+    filter: none;
+    opacity: 0.75;
+  }
+}
+
+input[type="checkbox"] {
+  border-radius: 2px;
+
+  &:indeterminate {
+    background-color: var(--checkbox-background-checked);
+    border-color: var(--checkbox-border-checked);
+  }
+
+  &:checked {
+    background-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'><path fill='none' stroke='white' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='M6 10l3 3l6-6'/></svg>");
+  }
+}
+
+input[type="radio"] {
+  border-radius: 50%;
+
+  &:checked {
+    background-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'><circle r='2' fill='white'/></svg>");
+  }
+}
+
+/* ==========================================================================
+   Gravity Forms
+   ========================================================================== */
+
+.gform_wrapper.gravity-theme {
+  .gfield_label,
+  .ginput_complex label,
+  .gform-field-label + input,
+  .ginput_container input,
+  .ginput_container textarea {
+    font-family: var(--font-heading);
+    font-size: var(--label-size);
+    line-height: var(--leading-snug);
+    text-transform: uppercase;
+    padding-bottom: var(--spacing-5);
+    font-weight: 400;
+    padding: 1rem;
+    line-height: 1.2;
+  }
+
+  .gfield_label,
+  .ginput_complex label,
+  .gfield_required {
+    padding:0;
+    color: var(--text-primary);
+  }
+
+  .ginput_complex label {
+    margin-bottom: 8px;
+  }
+
+  .gform-footer {
+    padding: 0;
+    margin: 0;
+  }
+}
+
+.gform_required_legend {
+  display: none;
+}
+

@@ -7,6 +7,72 @@
   --color-warning: #FF802A;
   --color-success: #50bb7b;
 
+  /* Background */
+  --background-primary: var(--color-white);
+  --background-secondary: var(--color-grey);
+  --background-transparent: transparent;
+
+  /* Container */
+  --container-inverse: var(--color-grey);
+  --container-white: var(--color-white);
+  --container-mid: var(--color-grey);
+  --container-dark: var(--color-black);
+
+  /* Border */
+  --border-light: var(--color-grey);
+  --border-accent: var(--color-success);
+  --border-focus: var(--color-success);
+  --border-inverse-focus: var(--color-white);
+
+  /* Text */
+  --text-primary: var(--color-black);
+  --text-inverse: var(--color-white);
+  --text-secondary: var(--color-grey);
+  --text-brand: var(--color-success);
+  --text-link: var(--color-success);
+
+  /* Form */
+  --control-fill-default: var(--color-white);
+  --control-fill-hover: var(--color-grey);
+  --control-fill-active: var(--color-grey);
+  --control-text-default: var(--color-grey);
+  --control-text-hover: var(--color-black);
+  --control-text-active: var(--color-white);
+  --control-border-default: #E1D9CE00;
+  --control-border-hover: #2B197C00;
+  --control-border-active: #2B197C00;
+  --field-fill-default: var(--color-white);
+  --field-fill-inverse-default: var(--color-grey);
+  --field-text-default: var(--color-grey);
+  --field-text-inverse-default: var(--color-white);
+  --field-text-hover: var(--color-black);
+  --field-text-inverse-hover: var(--color-white);
+  --field-text-active: var(--color-black);
+  --field-text-inverse-active: var(--color-white);
+  --field-text-error: var(--color-error);
+  --field-text-inverse-error: #FF756DFF;
+  --field-text-success: var(--color-success);
+  --field-text-inverse-success: #51F07FFF;
+  --field-border-default: var(--color-grey);
+  --field-border-inverse-default: var(--color-success);
+  --field-border-hover: var(--color-grey);
+  --field-border-inverse-hover: var(--color-white);
+  --field-border-active: var(--color-success);
+  --field-border-inverse-active: var(--color-success);
+  --field-border-error: var(--color-error);
+  --field-border-inverse-error: #FF756DFF;
+  --field-border-focus: var(--color-success);
+  --field-border-inverse-focus: var(--color-white);
+  --field-icon-default: var(--color-grey);
+  --field-icon-inverse-default: var(--color-white);
+  --field-icon-hover: var(--color-success);
+  --field-icon-inverse-hover: var(--color-white);
+  --field-label-default: var(--color-grey);
+  --field-label-inverse-default: var(--color-white);
+  --field-label-error: var(--color-error);
+  --field-label-inverse-error: #FF756DFF;
+
+
   /* Font Families */
   --font-heading: "Open Sans", sans-serif;
   --font-body: "Open Sans", serif;
@@ -20,6 +86,7 @@
   --text-18: 1.125rem;
   --text-20: 1.25rem;
   --text-24: 1.5rem;
+  --text-26: 1.625rem;
   --text-28: 1.75rem;
   --text-30: 1.875rem;
   --text-32: 2rem;
@@ -27,7 +94,9 @@
   --text-36: 2.25rem;
   --text-40: 2.5rem;
   --text-44: 2.75rem;
+  --text-48: 3rem;
   --text-50: 3.125rem;
+  --text-56: 3.5rem;
   --text-60: 3.75rem;
   --text-72: 4.5rem;
   --text-110: 6.875rem;
@@ -42,10 +111,10 @@
 
   /* Line Heights */
   --leading-none: 1;
-  --leading-tight: 1.25;
-  --leading-snug: 1.375;
-  --leading-normal: 1.5;
-  --leading-relaxed: 1.625;
+  --leading-tight: 1.1;
+  --leading-snug: 1.2;
+  --leading-normal: 1.4;
+  --leading-relaxed: 1.5;
   --leading-loose: 2;
 
   /* Letter Spacing */
@@ -130,6 +199,7 @@
   --z-overlay: 15;
   --z-dropdown: 11;
   --z-header: 10;
+  --z-drawer: 5;
   --z-foreground: 1;
   --z-base: 0;
   --z-background: -1;

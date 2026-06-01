@@ -1,0 +1,36 @@
+
+/*
+The vertical spacing between our inner blocks has the following rules:
+- [1] All sections have padding of 64px desktop and 40px mobile
+*/
+
+
+.c-outerblock { /* [1] */
+padding: var(--padding-vertical) 0;
+
+  &.c-quote { /* [3] */
+    padding: 1rem 0;
+  }
+}
+
+.col-innerblocks {
+  display: flex;
+  flex-direction: column;
+
+  > * + * {
+    margin-top: var(--gap-large);
+  }
+
+  > :where(p, ul, ol) + :where(p, ul, ol) {
+    margin-top: var(--gap-small);
+  }
+}
+
+.col-heading {
+  display: flex;
+  flex-direction: column;
+
+  > * + * {
+    margin-top: var(--gap-medium);
+  }
+}

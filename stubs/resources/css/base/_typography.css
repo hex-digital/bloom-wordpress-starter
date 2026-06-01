@@ -1,0 +1,176 @@
+/* ==========================================================================
+   Typography
+   ========================================================================== */
+:root {
+  /* Typography — responsive size custom properties */
+  --display-homepage-size: var(--text-36);
+  --display-size: var(--text-36);
+  --page-title-lg-size: var(--text-32);
+  --page-title-sm-size: var(--text-24);
+  --h2-size: var(--text-40);
+  --h3-size: var(--text-26);
+  --h4-size: var(--text-20);
+  --h5-size: var(--text-16);
+  --h6-size: var(--text-14);
+  --body-size: var(--text-18);
+  --eyebrow-size: var(--text-12);
+  --label-size: var(--text-12);
+  --quote-size: var(--text-20);
+  --button-size: var(--text-16);
+  --footnote-size: var(--text-12);
+  --menu-item-size: var(--text-14);
+  --post-title-size: var(--text-32);
+  --post-heading-size: var(--text-20);
+  --card-title-size: var(--text-20);
+  --card-caption-size: var(--text-18);
+  --card-label-size: var(--text-14);
+
+  @media (width >= 75rem) {
+    --display-homepage-size: var(--text-72);
+    --display-size: var(--text-56);
+    --page-title-lg-size: var(--text-48);
+    --page-title-sm-size: var(--text-40);
+    --quote-size: var(--text-24);
+    --post-title-size: var(--text-48);
+    --post-heading-size: var(--text-24);
+    --card-title-size: var(--text-24);
+  }
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-size: var(--page-title-lg-size);
+  font-family: var(--font-heading);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: var(--tracking-normal);
+  line-height: var(--leading-snug);
+  word-break: break-word;
+  color: var(--text-primary);
+
+  @media (width >= 75rem) {
+    line-height: var(--leading-tight);
+  }
+}
+
+h1 {
+  font-size: var(--page-title-lg-size);
+}
+
+
+h2 {
+  font-size: var(--h2-size);
+}
+
+h3 {
+  font-size: var(--h3-size);
+}
+
+h4 {
+  font-size: var(--h4-size);
+}
+
+h5 {
+  font-size: var(--h5-size);
+}
+
+h6 {
+  font-size: var(--h6-size);
+}
+
+strong,
+.strong {
+  font-weight: var(--font-weight-bold);
+}
+
+.text-display {
+  font-size: var(--display-size);
+  line-height: var(--leading-snug);
+
+  @media (width >= 75rem) {
+    line-height: var(--leading-tight);
+  }
+}
+
+.text-display--homepage {
+  font-size: var(--display-homepage-size);
+  line-height: var(--leading-tight);
+}
+
+.text-page-title-lg {
+  font-size: var(--page-title-lg-size);
+  line-height: var(--leading-tight);
+}
+
+.text-page-title-sm {
+  font-size: var(--page-title-sm-size);
+  line-height: 1.3;
+}
+
+.text-post-title {
+  font-size: var(--post-title-size);
+  line-height: var(--leading-tight);
+}
+
+.text-post-heading-title {
+  font-size: var(--post-heading-size);
+}
+
+.text-eyebrow {
+  font-family: var(--font-heading);
+  font-size: var(--eyebrow-size);
+  line-height: var(--leading-snug);
+  color: var(--text-primary);
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+.text-label {
+  font-family: var(--font-heading);
+  font-size: var(--label-size);
+  line-height: var(--leading-snug);
+  text-transform: uppercase;
+}
+
+.text-quote {
+  font-family: var(--font-heading);
+  font-size: var(--quote-size);
+}
+
+.text-button {
+  font-size: var(--button-size);
+  line-height: var(--leading-snug);
+}
+
+.text-footnote {
+  font-size: var(--footnote-size);
+  line-height: var(--leading-relaxed);
+}
+
+.text-menu-item {
+  font-family: var(--font-button);
+  font-size: var(--menu-item-size);
+  line-height: var(--leading-snug);
+  font-weight: 500;
+  text-transform: uppercase;
+}
+
+.text-card-title {
+  font-family: var(--font-heading);
+  font-size: var(--card-title-size);
+  line-height: 1.3;
+}
+
+.text-card-caption {
+  font-size: var(--card-caption-size);
+}
+
+.text-card-label {
+  font-family: var(--font-heading);
+  font-size: var(--card-label-size);
+  line-height: 1.3;
+  text-transform: uppercase;
+}
