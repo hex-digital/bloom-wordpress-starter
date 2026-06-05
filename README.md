@@ -17,19 +17,30 @@ Bloom is an opinionated starter layer for Roots Sage themes. It scaffolds projec
 
 ## Install in an Existing Sage Theme
 
-1. Require the package in your Sage theme:
+1. Add the package repository to your theme `composer.json`:
+
+```bash
+  "repositories": [
+    {
+      "type": "vcs",
+      "url": "git@github.com:hex-digital/bloom-wordpress-starter.git"
+    }
+  ]
+```
+
+2. Require the package in your Sage theme:
 
 ```bash
 composer require hex-digital/bloom
 ```
 
-2. Run the installer command from your theme root:
+3. Run the installer command from your theme root:
 
 ```bash
 wp acorn bloom:install
 ```
 
-3. Install/build frontend assets:
+4. Install/build frontend assets:
 
 ```bash
 npm install
