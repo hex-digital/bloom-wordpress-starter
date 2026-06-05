@@ -123,14 +123,14 @@ class BloomServiceProvider extends ServiceProvider
             return;
         }
 
-        $bloomBlocksDir = get_theme_file_path('/Bloom/Blocks');
+        $bloomDir = get_theme_file_path('/Bloom');
 
-        if (! is_dir($bloomBlocksDir)) {
+        if (! is_dir($bloomDir)) {
             return;
         }
 
         $app = app('AcfComposer');
-        $app->registerPath($bloomBlocksDir, 'Bloom\\Blocks\\');
+        $app->registerPath($bloomDir, 'Bloom\\');
     }
 
     protected function initBloomComponents(): void
