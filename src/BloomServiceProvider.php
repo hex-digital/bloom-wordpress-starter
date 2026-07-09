@@ -97,7 +97,7 @@ class BloomServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->initBloomViews();
-        $this->initBloomBlocks();
+        $this->initBloomAcf();
         $this->initBloomComponents();
         $this->initBloomComposers();
         $this->initBloomDirectives();
@@ -117,7 +117,11 @@ class BloomServiceProvider extends ServiceProvider
         }
     }
 
-    protected function initBloomBlocks(): void
+    /**
+     * Register all ACF Composer classes (Fields, Blocks, Widgets, Options) found
+     * anywhere within the theme's Bloom/ directory, e.g. Bloom/Fields, Bloom/Blocks.
+     */
+    protected function initBloomAcf(): void
     {
         if (! function_exists('get_theme_file_path')) {
             return;
