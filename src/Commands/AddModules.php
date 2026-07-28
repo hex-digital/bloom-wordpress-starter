@@ -100,6 +100,7 @@ class AddModules extends Command
         $destinationPaths = [
             'Blocks' => 'Bloom/Blocks',
             'Fields' => 'Bloom/Fields',
+            'Partials' => 'Bloom/Partials',
             'Components' => 'Bloom/Components',
             'Composers' => 'Bloom/Composers',
             'Livewire' => 'Bloom/Livewire',

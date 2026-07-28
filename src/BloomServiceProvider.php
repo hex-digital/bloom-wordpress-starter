@@ -118,8 +118,12 @@ class BloomServiceProvider extends ServiceProvider
     }
 
     /**
-     * Register all ACF Composer classes (Fields, Blocks, Widgets, Options) found
-     * anywhere within the theme's Bloom/ directory, e.g. Bloom/Fields, Bloom/Blocks.
+     * Register ACF Composer classes from Bloom type directories.
+     *
+     * Fields, Blocks, Widgets, and Options are discovered and registered with ACF.
+     * Partials live under Bloom/Partials and are intentionally not registered —
+     * they are composed into fields/blocks via addPartial() and resolved via
+     * Composer autoload (Bloom\Partials\...).
      */
     protected function initBloomAcf(): void
     {
@@ -127,14 +131,24 @@ class BloomServiceProvider extends ServiceProvider
             return;
         }
 
-        $bloomDir = get_theme_file_path('/Bloom');
-
-        if (! is_dir($bloomDir)) {
-            return;
-        }
-
         $app = app('AcfComposer');
-        $app->registerPath($bloomDir, 'Bloom\\');
+
+        $paths = [
+            'Blocks' => 'Bloom\\Blocks\\',
+            'Fields' => 'Bloom\\Fields\\',
+            'Widgets' => 'Bloom\\Widgets\\',
+            'Options' => 'Bloom\\Options\\',
+        ];
+
+        foreach ($paths as $directory => $namespace) {
+            $path = get_theme_file_path("/Bloom/{$directory}");
+
+            if (! is_dir($path)) {
+                continue;
+            }
+
+            $app->registerPath($path, $namespace);
+        }
     }
 
     protected function initBloomComponents(): void
