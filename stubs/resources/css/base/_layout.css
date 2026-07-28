@@ -16,7 +16,7 @@
   --padding-vertical-inner: 24px;
   --padding-vertical-card: 16px;
 
-  @media (--breakpoint-desk) {
+ @media screen and (min-width: 75rem)  {
     --wrapper-padding: 40px;
     --gap-center: 32px;
     --gap-large: 56px;
