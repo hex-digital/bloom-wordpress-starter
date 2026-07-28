@@ -95,7 +95,7 @@ label {
   z-index: 999;
 }
 
-.u-fixed-footer {
+.fixed-footer {
   display: grid;
   grid-template-rows: 1fr auto;
   height: 100%;
