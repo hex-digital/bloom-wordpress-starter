@@ -120,10 +120,7 @@ class BloomServiceProvider extends ServiceProvider
     /**
      * Register ACF Composer classes from Bloom type directories.
      *
-     * Fields, Blocks, Widgets, and Options are discovered and registered with ACF.
-     * Partials live under Bloom/Partials and are intentionally not registered —
-     * they are composed into fields/blocks via addPartial() and resolved via
-     * Composer autoload (Bloom\Partials\...).
+     * Blocks, Fields, Partials, and Options are discovered and registered with ACF.
      */
     protected function initBloomAcf(): void
     {
@@ -136,7 +133,7 @@ class BloomServiceProvider extends ServiceProvider
         $paths = [
             'Blocks' => 'Bloom\\Blocks\\',
             'Fields' => 'Bloom\\Fields\\',
-            'Widgets' => 'Bloom\\Widgets\\',
+            'Partials' => 'Bloom\\Partials\\',
             'Options' => 'Bloom\\Options\\',
         ];
 
