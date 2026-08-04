@@ -3,7 +3,6 @@
 @import "./base/_typography.css";
 @import "./base/_layout.css";
 @import "./base/_spacing.css";
-@import "./base/_mixins.css";
 
 /* ==========================================================================
    Config (CSS custom properties for this project)

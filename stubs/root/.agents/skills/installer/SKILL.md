@@ -28,6 +28,7 @@ What it does:
   - Non-Bedrock: `/wp-content/themes/{theme-name}/public/build/`
   - The theme directory name is auto-detected from the current path.
 - Patches `composer.json` with the `Bloom\` → `Bloom/` autoload entry when missing.
+- Merges `stubs/package.json` into the theme `package.json`, adding only missing `dependencies` / `devDependencies` / `scripts` keys (never overwrites existing versions or scripts, including with `--force`).
 - Config files (`Bloom/config/*.php`) are only copied if missing — they won't be clobbered on a plain re-run. Use `--force` to overwrite everything, or `--diff` first to see what would change.
 
 Re-running the installer (e.g. after upgrading the `hex-digital/bloom` package) can update this theme's previously-scaffolded files — run `--diff` before assuming files under `Bloom/`, `app/`, or `resources/` are purely hand-written project code.
