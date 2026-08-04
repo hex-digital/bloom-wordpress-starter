@@ -51,17 +51,6 @@ Bloom is an opinionated, productivity-driven WordPress starter theme with a mode
 
 See more about Bloom here: https://www.github.com/hex-digital/bloom-wordpress-starter
 
-### Updating Sage framework
-
-We may wish to update this repo with the latest changes in Sage.
-
-The `upstream` branch tracks Sage 10.
-
-The easiest way to update this theme is to pull in the latest changes from Sage
-into the `upstream` branch, then create a PR from `upstream` to `main`.
-
-This will highlight all Sage changes, as well as any conflicts to solve.
-
 ### Documentation
 **Bloom**
 https://www.github.com/hex-digital/bloom-wordpress-starter
