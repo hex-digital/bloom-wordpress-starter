@@ -10,10 +10,10 @@
 
 Make sure you have all this software is installed before moving on:
 
-- [WordPress](https://wordpress.org/) >= 5.4
-- [PHP](https://secure.php.net/manual/en/install.php) >= 8.1
-- [Composer](https://getcomposer.org/download/) >= 2.3.5
-- [Node.js](http://nodejs.org/) >= 20.0
+- [WordPress](https://wordpress.org/) >= 7.0.2
+- [PHP](https://secure.php.net/manual/en/install.php) >= 8.3
+- [Composer](https://getcomposer.org/download/) >= 2.10.2
+- [Node.js](http://nodejs.org/) >= 22
 
 ### Theme installation
 
@@ -27,8 +27,6 @@ Clone the repo into the `themes` directory of your WordPress installation.
 ### Environment Variables
 
 - Copy `.env.example` to `.env`, and modify the following variables as needed:
-
-`BUD_PROXY` - The URL to access your local version of the site. If you're using something like [LocalWP](https://localwp.com/), this would be the "site domain". E.g `http://bloom.local`
 
 `PUBLIC_PATH` - This is the file path to *theme's* public directory. E.g. `/wp-content/themes/bloom/public/`
 
