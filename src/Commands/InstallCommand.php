@@ -42,6 +42,7 @@ class InstallCommand extends Command
 
         $this->copyStubRoots();
         $this->patchComposerAutoload();
+        $this->patchPackageJson();
         $this->patchAppCss();
         $this->patchViteConfig();
 
@@ -207,6 +208,106 @@ class InstallCommand extends Command
 
         $this->files->put($composerJsonPath, $encoded."\n");
         $this->components->twoColumnDetail('Patched composer.json (Bloom\\ autoload)', '<fg=green;options=bold>DONE</>');
+    }
+
+    protected function patchPackageJson(): void
+    {
+        $mergePath = "{$this->stubsPath}/package.json";
+
+        if (! $this->files->exists($mergePath)) {
+            return;
+        }
+
+        $merge = json_decode($this->files->get($mergePath), true);
+
+        if (! is_array($merge)) {
+            $this->components->warn('Could not parse stubs/package.json. Skipping package.json merge.');
+
+            return;
+        }
+
+        $mergeableSections = ['dependencies', 'devDependencies', 'scripts'];
+        $fragment = [];
+
+        foreach ($mergeableSections as $section) {
+            if (! isset($merge[$section]) || ! is_array($merge[$section]) || $merge[$section] === []) {
+                continue;
+            }
+
+            $fragment[$section] = $merge[$section];
+        }
+
+        if ($fragment === []) {
+            return;
+        }
+
+        $packageJsonPath = base_path('package.json');
+
+        if (! $this->files->exists($packageJsonPath)) {
+            $this->printManualPackageJsonInstructions($fragment);
+
+            return;
+        }
+
+        $decoded = json_decode($this->files->get($packageJsonPath), true);
+
+        if (! is_array($decoded)) {
+            $this->printManualPackageJsonInstructions($fragment);
+
+            return;
+        }
+
+        $added = false;
+
+        foreach ($fragment as $section => $entries) {
+            $decoded[$section] ??= [];
+
+            if (! is_array($decoded[$section])) {
+                $decoded[$section] = [];
+            }
+
+            foreach ($entries as $name => $value) {
+                if (! is_string($name) || array_key_exists($name, $decoded[$section])) {
+                    continue;
+                }
+
+                $decoded[$section][$name] = $value;
+                $added = true;
+            }
+
+            ksort($decoded[$section]);
+        }
+
+        if (! $added) {
+            $this->components->twoColumnDetail('package.json', '<fg=yellow;options=bold>ALREADY PATCHED</>');
+
+            return;
+        }
+
+        $encoded = json_encode($decoded, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+        if (! is_string($encoded)) {
+            $this->printManualPackageJsonInstructions($fragment);
+
+            return;
+        }
+
+        $this->files->put($packageJsonPath, $encoded."\n");
+        $this->components->twoColumnDetail('Patched package.json (Bloom npm merge)', '<fg=green;options=bold>DONE</>');
+    }
+
+    protected function printManualPackageJsonInstructions(array $fragment): void
+    {
+        $this->components->warn('Could not auto-patch package.json. Please merge the following into your theme package.json:');
+        $this->newLine();
+
+        $encoded = json_encode($fragment, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+        if (is_string($encoded)) {
+            foreach (explode("\n", $encoded) as $line) {
+                $this->line("    <fg=cyan>{$line}</>");
+            }
+        }
+
+        $this->newLine();
     }
 
     protected function patchViteAlias(string $content): string

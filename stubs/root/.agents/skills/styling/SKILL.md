@@ -30,7 +30,7 @@ description: Bloom's Tailwind v4 + PostCSS setup - the @theme token system, no c
   - `resources/css/app.css` — `@import "tailwindcss" theme(static);` then Bloom base styles, forms, page styles, the typography plugin, `@source`s, and page-specific overrides (`.prose`, `.nav-links`, etc.).
   - `resources/css/editor.css` / `editor-base.css` — `@import "tailwindcss";` for the block-editor iframe (Gutenberg), plus editor-specific resets in `editor.css`.
   - `resources/css/admin.css` — WP login/admin screen styling, unrelated to Tailwind/the frontend build.
-- `resources/css/base/_mixins.css` uses `@define-mixin` (a PostCSS mixins plugin, not Sass) — this is the one place custom mixin syntax survives; don't assume Sass `@mixin`/`@include` semantics.
+- Custom mixins are defined in theme-root `postcss.config.js` via `postcss-mixins` (scaffolded from Bloom’s `stubs/root/postcss.config.js`). Use `@mixin transition …` in CSS — don't assume Sass `@mixin`/`@include` semantics or a `resources/css/base/_mixins.css` file.
 
 ## Class naming convention (`o-` / `c-`)
 

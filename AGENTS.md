@@ -28,13 +28,13 @@ Sage theme (destination)
   └── composer require hex-digital/bloom
         └── wp acorn bloom:install
               ├── copy stubs/{bloom,app,resources,root} → theme paths
-              └── patch composer.json / app.css / vite.config.*
+              └── patch composer.json / package.json / app.css / vite.config.*
 ```
 
 | Path | Role |
 |---|---|
 | `src/` | Package PHP (`HexDigital\Bloom\`) — service provider + Acorn commands |
-| `stubs/` | Files copied into the destination theme |
+| `stubs/` | Files copied into the destination theme (plus `stubs/package.json` merge fragment) |
 | `composer.json` | Package deps + Acorn provider registration |
 | `README.md` | Human install docs |
 | `AGENTS.md` (this file) | Agent guide for **this** repo only |
@@ -87,6 +87,7 @@ Current patch targets (called from `handle()`):
 | Method | Destination file | What it does |
 |---|---|---|
 | `patchComposerAutoload()` | theme `composer.json` | Ensures `autoload.psr-4["Bloom\\"] = "Bloom/"` |
+| `patchPackageJson()` | theme `package.json` | Merges missing keys from `stubs/package.json` (`dependencies` / `devDependencies` / `scripts`) |
 | `patchAppCss()` | `resources/css/app.css` | Inserts `@import "./bloom-base.css";` and `@source "../../Bloom/";` after Tailwind import |
 | `patchViteConfig()` | `vite.config.js` or `.ts` | Adds `@bloom` alias, `editor.css` / `admin.css` inputs, and `base` path |
 
@@ -109,15 +110,21 @@ After changing this package’s `composer.json`, themes need a Composer update o
 
 ### Add npm dependencies for the destination theme
 
-The installer **does not** touch theme `package.json` today. This package also has **no** first-class theme-style Node build.
+Edit [`stubs/package.json`](stubs/package.json) — a **merge fragment**, not a theme manifest. It sits beside the four copy roots so it is never file-copied into the theme.
 
-When npm deps must be installed into destination themes:
+`bloom:install` runs `patchPackageJson()`, which merges only these top-level keys into the destination theme’s `package.json`:
 
-1. Add an idempotent `patchPackageJson()` (or similar) on `InstallCommand`.
-2. Call it from `handle()`.
-3. Merge only the required `dependencies` / `devDependencies` / scripts; skip keys already present.
-4. Do not introduce a full Sage/Vite app into *this* repo unless that is an intentional product change.
-5. Update the installer skill under `stubs/root/.agents/skills/installer/`.
+- `dependencies`
+- `devDependencies`
+- `scripts`
+
+Rules:
+
+- Add a package/script only if that key is missing in the theme
+- Never overwrite an existing version or script (including with `--force`; force only affects stub file copies)
+- Do **not** put a full theme `package.json` under `stubs/root/` — `--force` could replace the theme’s entire npm manifest
+- This package itself has no theme-style Node build; themes still run `npm install` after install
+- Update the installer skill under `stubs/root/.agents/skills/installer/` when merge behaviour changes
 
 ### Update destination-theme agent docs
 
@@ -169,7 +176,7 @@ After install, themes typically run `composer dump-autoload && npm install && np
 - `--force` overwrites existing scaffolded files and can wipe theme customizations in those paths.
 - `--diff` uses a small hard-coded path list in `handleDiff()` and is partly stale (e.g. tokens live under `stubs/resources/css/base/`). When changing tracked stub paths, update that mapping.
 - Vite `base` is currently always written as `/wp-content/themes/{theme}/public/build/`. Bedrock-style `/app/themes/...` may need a manual theme-side fix (documented in README).
-- This repo has no theme `package.json`. The Node job in `.github/workflows/main.yml` is a theme-era leftover — do not assume `npm install` / `npm run build` work here when changing CI.
+- `stubs/package.json` is a merge fragment for destination themes, not a package manifest for this repo. The Node job in `.github/workflows/main.yml` is a theme-era leftover — do not assume `npm install` / `npm run build` work here when changing CI.
 - Prefer `Bloom\` code in stubs over replacing Sage’s `app/` files when both are viable.
 
 ---
@@ -180,5 +187,5 @@ After install, themes typically run `composer dump-autoload && npm install && np
 2. Do not treat `stubs/root/.agents/` as the guide for maintaining this package (maintain it for consumers; operate from this file).
 3. Do not turn this package into a full Sage theme checkout.
 4. Do not expand surface area with unrelated Sage/vendor copies.
-5. Do not assume theme `package.json` is patched unless you add that installer support.
+5. Do not put a full theme `package.json` under `stubs/root/`.
 )

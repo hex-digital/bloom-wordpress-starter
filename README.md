@@ -58,8 +58,9 @@ The `bloom:install` command:
 - patches `resources/css/app.css` to include Bloom CSS
 - patches `vite.config.js`/`vite.config.ts` to include Bloom aliases and entries
 - patches `composer.json` with `Bloom\\ => Bloom/` autoload when missing
+- merges `stubs/package.json` into the theme `package.json` (`dependencies` / `devDependencies` / `scripts` keys missing in the theme only)
 
-Config files are copied only when missing. Use `wp acorn bloom:install --force` to overwrite existing files.
+Config files are copied only when missing. Use `wp acorn bloom:install --force` to overwrite existing files. `--force` does not overwrite existing npm package versions or scripts.
 
 ## Stub Directory Mapping
 
@@ -69,6 +70,7 @@ Use these package directories to control destination paths during install:
 - `stubs/app` -> `app/`
 - `stubs/resources` -> `resources/`
 - `stubs/root` -> theme root
+- `stubs/package.json` -> merged into theme `package.json` (not copied as a file)
 
 ## Vite Updates Applied by Installer
 
