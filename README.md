@@ -31,6 +31,7 @@ Bloom is an opinionated starter layer for Roots Sage themes. It scaffolds projec
     }
   ]
 ```
+Note: You may need to create a Classic Personal Token with full `repo` privileges. 
 
 2. Require the package in your Sage theme:
 
