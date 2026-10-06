@@ -24,6 +24,10 @@ Bloom is an opinionated starter layer for Roots Sage themes. It scaffolds projec
     {
       "type": "vcs",
       "url": "git@github.com:hex-digital/bloom-wordpress-starter.git"
+    },
+    {
+      "type": "vcs",
+      "url": "git@github.com:hex-digital/bloom-modules.git"
     }
   ]
 ```
